@@ -46,8 +46,11 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\TileMap.cs" />
-     <Compile Include="Assets\TileMapMouse.cs" />
+     <Compile Include="Assets\Backups\TileMap.cs" />
+     <Compile Include="Assets\Tile Data\TDMap.cs" />
+     <Compile Include="Assets\Tile Data\TDTile.cs" />
+     <Compile Include="Assets\Tile Graphics\TGMap.cs" />
+     <Compile Include="Assets\Tile Graphics\TileMapMouse.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>E:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.2/UnityEngine.UI.dll</HintPath>
  </Reference>
