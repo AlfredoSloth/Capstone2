@@ -4,14 +4,15 @@ using System.Collections;
 [RequireComponent(typeof(TileMap))]
 public class TileMapMouse : MonoBehaviour {
 
-	TileMap _tileMap;
-
+	TGMap _tileMapGfx;
+	
 	Vector3 currentTileCoord;
 
 	public Transform selectionCube;
 
 	void Start() {
-		_tileMap = GetComponent<TileMap> ();
+		_tileMapGfx = GetComponent<TGMap> ();
+
 	}
 
 	// Update is called once per frame
@@ -20,9 +21,9 @@ public class TileMapMouse : MonoBehaviour {
 		RaycastHit hitInfo;
 
 		if (collider.Raycast (ray, out hitInfo, Mathf.Infinity)) {
-			int x = Mathf.FloorToInt(hitInfo.point.x/_tileMap.tileSize);
-			int z = Mathf.FloorToInt(hitInfo.point.z/_tileMap.tileSize);
-			Debug.Log("x:" + x + " z:" + z);
+			int x = Mathf.FloorToInt(hitInfo.point.x/_tileMapGfx.tileSize);
+			int z = Mathf.FloorToInt(hitInfo.point.z/_tileMapGfx.tileSize);
+			//Debug.Log("x:" + x + " z:" + z);
 			currentTileCoord.x = x;
 			currentTileCoord.z = z;
 
@@ -31,7 +32,7 @@ public class TileMapMouse : MonoBehaviour {
 		else {
 		}
 		if(Input.GetMouseButtonDown (0)){
-			Debug.Log("CLick!");
+			Debug.Log("Terrain Type:" + TGMap.map.GetTileAt((int)currentTileCoord.x, (int)currentTileCoord.y).getTerrainType());
 		}
 	}
 }
