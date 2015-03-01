@@ -28,6 +28,7 @@ public class TileMapMouse : MonoBehaviour {
 			currentTileCoord.z = z;
 
 			selectionCube.transform.position = currentTileCoord*3f;
+
 		}
 		else {
 		}
@@ -35,4 +36,5 @@ public class TileMapMouse : MonoBehaviour {
 			Debug.Log("Terrain Type:" + TGMap.map.GetTileAt((int)currentTileCoord.x, (int)currentTileCoord.y).getTerrainType());
 		}
 	}
+	
 }
