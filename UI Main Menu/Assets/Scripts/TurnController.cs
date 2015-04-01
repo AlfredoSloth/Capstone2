@@ -56,10 +56,11 @@ public class TurnController : MonoBehaviour {
 				warningMessage.text = "Max distance is " + distance.ToString() + " grids!";
 			}
 		} else if (Input.GetMouseButtonDown (0) && moveCount >= maxMoves) {
-			EndTurn();
+			//EndTurn();
+			SetEndTurnText();
 		}
 	}
-	
+	/*
 	//ending the turn when reach the max number of moves, no matter where on the map is selected
 	//or end turn button has been press (this will be implemented when the button object has been added)
 	//turn end by incrementing the turn number counter and resetting move counter to 0 for the new turn
@@ -71,15 +72,33 @@ public class TurnController : MonoBehaviour {
 		SetTurnCountText();
 		moveCount = 0;
 	}
-	
+	*/
+	//Displays New turn when, all things hovers have been called.
+	void SetEndTurnText(){
+		turnMessage.text = "NEW TURN!";
+	}
+
+
 	//setting the turn counter text to display the turn number
 	void SetTurnCountText(){
 		turnCountText.text = "Turn Number: " + turnNum.ToString();
-		turnMessage.text = "NEW TURN!";
+	//	turnMessage.text = "NEW TURN!";
 	}
 	
 	//setting GUIText to empty string to hide it
 	void hideMessage(GUIText message){
 		message.text = "";
 	}
+	//The "new turn" button
+	//Note to self: Debug trips sometimes after in TileMapMouse.CS, line 35-36
+	//Issues, this is a quick and dirty method. 
+	void OnGUI () {
+		if (GUI.Button (new Rect (Screen.width - 100,Screen.height - 50,100,50), "New Turn")) {
+			turnNum = turnNum + 1;
+			SetTurnCountText();
+			moveCount = 0;
+			
+		}
+	}
+
 }
