@@ -7,6 +7,7 @@ public class TurnController : MonoBehaviour {
 	//turn properties
 	private int turnNum; //to keep track of the turn number for testing purpose
 	private int moveCount; //counter for number of available moves during current turn
+	private int buttonClick;
 
 	//notifications for testing purpose
 	public GUIText turnCountText;
@@ -16,9 +17,11 @@ public class TurnController : MonoBehaviour {
 	//player properties and can be set in the inspector of Player gameObject
 	public int maxMoves = 2; //max number of moves during a turn
 	public int distance = 1; //the number of grids available for each move in all directions
+
 	
 	// Use this for initialization
 	void Start () {
+		buttonClick = 0;
 		moveCount = 0;
 		turnNum = 1;
 		SetTurnCountText();
@@ -52,14 +55,19 @@ public class TurnController : MonoBehaviour {
 				hideMessage(turnMessage);
 				hideMessage(warningMessage);
 			}else{
+				//buttonClick++;
 				hideMessage(turnMessage);
 				warningMessage.text = "Max distance is " + distance.ToString() + " grids!";
 			}
-		} else if (Input.GetMouseButtonDown (0) && moveCount >= maxMoves) {
-			EndTurn();
+		} 
+		else if (Input.GetMouseButtonDown (0) && moveCount >= maxMoves) {
+			//EndTurn();
+		//	buttonClick++;
+		//	SetTurnCountText();
+			SetEndTurnText();
 		}
 	}
-	
+	/*
 	//ending the turn when reach the max number of moves, no matter where on the map is selected
 	//or end turn button has been press (this will be implemented when the button object has been added)
 	//turn end by incrementing the turn number counter and resetting move counter to 0 for the new turn
@@ -68,15 +76,39 @@ public class TurnController : MonoBehaviour {
 		SetTurnCountText();
 		moveCount = 0;
 	}
-	
+	*/
 	//setting the turn counter text to display the turn number
-	void SetTurnCountText(){
-		turnCountText.text = "Turn Number: " + turnNum.ToString();
+
+	void SetEndTurnText(){
 		turnMessage.text = "NEW TURN!";
 	}
+
+	void SetTurnCountText(){
+		turnCountText.text = "Turn Number: " + turnNum.ToString();
+	//	turnMessage.text = "NEW TURN!";
+	}
+
+
 	
 	//setting GUIText to empty string to hide it
 	void hideMessage(GUIText message){
 		message.text = "";
 	}
+	//The "new turn" button
+	//Note to self: Debug trips sometimes after in TileMapMouse.CS, line 35-36
+	//Issues, this is a quick and dirty method. 
+	//Problems... New turn! message doesn't go away.
+	//counter goes up before, button push
+	void OnGUI () {
+		if (GUI.Button (new Rect (0,Screen.height - 50,100,50), "New Turn")) {
+
+	
+				turnNum = turnNum + 1;
+				SetTurnCountText();
+				moveCount = 0;
+		
+		}
+	}
+
+
 }
