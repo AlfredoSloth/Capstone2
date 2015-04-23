@@ -24,7 +24,6 @@ public class TileMapMouse : MonoBehaviour {
 	
 	Building build, hover;
 	string place = "";
-	string type = "";
 	int resource; 
 	
 	void Start() {
@@ -159,6 +158,7 @@ public class TileMapMouse : MonoBehaviour {
 		Color oldColor = mat.color;
 		foreach (Transform child in selectionCube) { 
 			//child.renderer.material.color = new Color (oldColor.r, oldColor.b, oldColor.g, alpha);
+
 		}
 		
 	}
