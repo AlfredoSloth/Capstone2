@@ -1,0 +1,26 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Technologies.cs">
+    <Files>
+      <File FileName="Assets\Scripts\Player.cs" Line="226" Column="30" />
+      <File FileName="Assets\Building Scripts\Rover.cs" Line="1" Column="1" />
+      <File FileName="Assets\Tile Data\TDTile.cs" Line="1" Column="1" />
+      <File FileName="Assets\Building Scripts\Base.cs" Line="1" Column="1" />
+      <File FileName="Assets\Building Scripts\Beacon.cs" Line="1" Column="1" />
+      <File FileName="Assets\Building Scripts\ChemistryPlant.cs" Line="1" Column="1" />
+      <File FileName="Assets\Building Scripts\Warehouse.cs" Line="1" Column="1" />
+      <File FileName="Assets\Building Scripts\Powerplant.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\TurnController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\TurnSystem.cs" Line="1" Column="1" />
+      <File FileName="Assets\Building Scripts\Building.cs" Line="11" Column="17" />
+      <File FileName="Assets\Building Scripts\ResearchLab.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Technologies.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="G:\New folder (2)\BuildingFunctions+UI Style\Assets\Tile Graphics\TileMapMouse.cs" line="480" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
