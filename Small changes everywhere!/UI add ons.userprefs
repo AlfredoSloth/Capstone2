@@ -1,0 +1,18 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Building Scripts\Powerplant.cs">
+    <Files>
+      <File FileName="Assets\Tile Graphics\ResourceIcon.cs" Line="3" Column="33" />
+      <File FileName="Assets\Building Scripts\Building.cs" Line="2" Column="34" />
+      <File FileName="Assets\Building Scripts\Base.cs" Line="155" Column="9" />
+      <File FileName="Assets\Tile Data\TDTile.cs" Line="125" Column="46" />
+      <File FileName="Assets\Tile Graphics\TileMapMouse.cs" Line="633" Column="1" />
+      <File FileName="Assets\Building Scripts\Beacon.cs" Line="21" Column="9" />
+      <File FileName="Assets\Building Scripts\Powerplant.cs" Line="69" Column="9" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
