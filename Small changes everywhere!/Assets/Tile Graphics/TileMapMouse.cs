@@ -321,6 +321,7 @@ public class TileMapMouse : MonoBehaviour {
 		place = type;
 		//Building check = TGMap.map.GetTileAt((int)currentTileCoord.x, (int)currentTileCoord.z).getBuilding();
 		//if(check==null){
+		resource = PlayerInfo.player.getBuildingResources ();
 		if (resource >= PlayerInfo.player.getCostAtLevel1 (place)) {
 			switch (place) {
 			case "Base":
