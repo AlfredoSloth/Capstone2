@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
-public class Player{
-	private int research;
-	private int food;
-	private int water;
-	private int buildingResources;
+public class Player : MonoBehaviour {
+	public int research;
+	public int food;
+	public int water;
+	public int buildingResources;
 	private Dictionary<string, int> costsAtLevel1;
 	private Dictionary<string, int> turnsToBuildAtLevel1;
 	private List<Research> technologies;

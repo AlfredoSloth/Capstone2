@@ -268,7 +268,7 @@ public class TileMapMouse : MonoBehaviour {
 					}
 				}
 			}
-			updateScoreText ();
+			updateScoreText();
 
 			//GameOver Message
 			if(basepop.getPopulation() == 0){
@@ -312,10 +312,10 @@ public class TileMapMouse : MonoBehaviour {
 	
 	
 	//Upgrades the textboxes on the UI
-	void updateScoreText(){
+	public void updateScoreText(){
 		waterScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getWater();
 		foodScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getFood();
-		buildingScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getBuildingResources();
+		buildingScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getBuildingResources;
 		researchScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getResearch();
 	}
 	
