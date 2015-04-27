@@ -193,6 +193,12 @@ public class Player : MonoBehaviour {
 	public void removeWarehouse(int index){
 		warehouses.RemoveAt (index);
 	}
+	public void loadResources(int loadedResearch, int loadedBuilding, int loadedWater, int loadedFood){
+		setResearch (loadedResearch);
+		setBuildingResources (loadedBuilding);
+		setWater (loadedWater);
+		setFood (loadedFood);
+	}
 
 	private void setCostsAtLevel1 (){
 		this.costsAtLevel1.Add ("Base", 250);

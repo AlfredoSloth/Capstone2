@@ -7,8 +7,6 @@ using System.IO;
 public class GameControl : MonoBehaviour {
 
 	public static GameControl control;
-	PlayerInfo tm;
-	TileMapMouse tmm;
 
 	void Awake(){
 		if (control == null) {
@@ -19,9 +17,7 @@ public class GameControl : MonoBehaviour {
 	}
 
 	void Start(){
-		tm = GameObject.FindGameObjectWithTag("tilemap").GetComponent<PlayerInfo> ();
-		//Debug.Log (Application.persistentDataPath + "/playerInfo.dat");
-		tmm = GameObject.FindGameObjectWithTag("tilemap").GetComponent<TileMapMouse> ();
+
 	}
 
 	public void Save(){
@@ -30,14 +26,15 @@ public class GameControl : MonoBehaviour {
 
 		PlayerData data = new PlayerData ();
 
-		data.waterResource = tm.water;
-		data.foodResource = tm.food;
-		data.buildingResource = tm.buildingResource;
-		Debug.Log ("tm.water = " + tm.water + ", tm.food = " + tm.food + ", tm.buildingResource = " + tm.buildingResource);
+		data.waterResource = PlayerInfo.player.getWater();
+		data.foodResource = PlayerInfo.player.getFood();
+		data.buildingResource = PlayerInfo.player.getBuildingResources();
+		data.researchResource = PlayerInfo.player.getResearch ();
+		Debug.Log ("On Save: data.water = " + data.waterResource + ", data.food = " + data.foodResource + ", data.buildingResource = " + data.buildingResource + ", data.researchResource = " + data.researchResource);
 
 		bf.Serialize (file, data);
 		file.Close ();
-		Debug.Log ("Save Successfully"); 
+		Debug.Log ("Saved Successfully"); 
 	}
 	public void Load(){
 		if (File.Exists ("/Users/lexus_mans/UnitySaves/playerInfo.dat")) {
@@ -46,13 +43,7 @@ public class GameControl : MonoBehaviour {
 			PlayerData data = (PlayerData)bf.Deserialize (file);
 			file.Close ();
 
-			tm.water = data.waterResource;
-			tm.food = data.foodResource;
-			tm.buildingResource = data.buildingResource;
-			tmm.updateScoreText(tm.water,tm.food,tm.buildingResource);
-
-			Debug.Log ("tm.water = " + tm.water + ", tm.food = " + tm.food + ", tm.buildingResource = " + tm.buildingResource);
-
+			PlayerInfo.player.loadResources(data.researchResource, data.buildingResource, data.waterResource, data.foodResource);
 
 			Debug.Log ("Loaded Successfully");
 		} else {
@@ -67,5 +58,6 @@ class PlayerData
 	public int waterResource;
 	public int foodResource;
 	public int buildingResource;
+	public int researchResource;
 
 }

@@ -310,12 +310,11 @@ public class TileMapMouse : MonoBehaviour {
 		}
 	}
 	
-	
 	//Upgrades the textboxes on the UI
 	public void updateScoreText(){
 		waterScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getWater();
 		foodScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getFood();
-		buildingScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getBuildingResources;
+		buildingScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getBuildingResources();
 		researchScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getResearch();
 	}
 	
