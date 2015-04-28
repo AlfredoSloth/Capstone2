@@ -1,13 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Player.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameManager2.cs">
     <Files>
       <File FileName="Assets/Scripts/GameControl.cs" Line="69" Column="4" />
-      <File FileName="Assets/Scripts/Player.cs" Line="107" Column="26" />
+      <File FileName="Assets/Scripts/Player.cs" Line="240" Column="17" />
       <File FileName="Assets/Scripts/PlayerInfo.cs" Line="1" Column="1" />
-      <File FileName="Assets/Tile Graphics/TGMap.cs" Line="29" Column="38" />
-      <File FileName="Assets/Tile Graphics/FogMap.cs" Line="6" Column="52" />
-      <File FileName="Assets/Building Scripts/Base.cs" Line="39" Column="29" />
+      <File FileName="Assets/Tile Graphics/TileMapMouse.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameManager2.cs" Line="26" Column="49" />
+      <File FileName="Assets/Scripts/GameManager.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

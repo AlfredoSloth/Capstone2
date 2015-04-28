@@ -74,7 +74,6 @@
      <Compile Include="Assets\Scripts\TileResource.cs" />
      <Compile Include="Assets\Scripts\TurnController.cs" />
      <Compile Include="Assets\Scripts\TurnSystem.cs" />
-     <Compile Include="Assets\Scripts\UIElements.cs" />
      <Compile Include="Assets\Sounds\MainMenu.cs" />
      <Compile Include="Assets\Tile Data\TDMap.cs" />
      <Compile Include="Assets\Tile Data\TDTile.cs" />
