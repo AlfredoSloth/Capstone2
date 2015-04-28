@@ -1,7 +1,8 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
-public class Player{
+public class Player : MonoBehaviour {
 	private int research;
 	private int food;
 	private int water;
@@ -192,7 +193,20 @@ public class Player{
 	public void removeWarehouse(int index){
 		warehouses.RemoveAt (index);
 	}
+	public void loadResources(int loadedResearch, int loadedBuilding, int loadedWater, int loadedFood){
+		setResearch (loadedResearch);
+		setBuildingResources (loadedBuilding);
+		setWater (loadedWater);
+		setFood (loadedFood);
+	}
+	/*
+	public void loadLists(List<Base>){
 
+	}
+	public void loadDictionaries(){
+	
+	}
+	*/
 	private void setCostsAtLevel1 (){
 		this.costsAtLevel1.Add ("Base", 250);
 		this.costsAtLevel1.Add ("Beacon", 150);

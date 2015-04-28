@@ -10,7 +10,7 @@ public class TGMap : MonoBehaviour {
 	public static int size_x = 100; //number of tiles left to right
 	public static int size_z = 50; //number of tiles top to bottom
 	public float tileSize = 1.0f;
-	public static TDMap map;
+	public static TDMap map; //save this
 	public Texture2D terrainTiles;
 	public int tileResolution;
 	public Transform mountainTile1;
@@ -21,7 +21,7 @@ public class TGMap : MonoBehaviour {
 	public Transform hillTile2;
 	public Transform hillTile3;
 	public Transform valleyTile;
-	public static Transform[,] elevationMap;
+	public static Transform[,] elevationMap; //save this
 	public Transform startTile;
 	public Material Hills;
 	public Texture valleyTexture;

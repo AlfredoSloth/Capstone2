@@ -29,6 +29,17 @@ public class TileMapMouse : MonoBehaviour {
 	int buildTerrainCheck;
 	Vector3 beacSavedCoords;
 	Building lastSelected;
+
+	public AudioClip baseSound;
+	public AudioClip beaconSound;
+	public AudioClip chemicalPlantSound;
+	public AudioClip factorySound;
+	public AudioClip farmSound;
+	public AudioClip magnetosphereMachineSound;
+	public AudioClip powerPlantSound;
+	public AudioClip researchLabSound;
+	public AudioClip warehouseSound;
+
 	void Start() {
 		_tileMapGfx = GetComponent<TGMap> ();
 		_playerInfo = GetComponent<PlayerInfo>();
@@ -268,7 +279,7 @@ public class TileMapMouse : MonoBehaviour {
 					}
 				}
 			}
-			updateScoreText ();
+			updateScoreText();
 
 			//GameOver Message
 			if(basepop.getPopulation() == 0){
@@ -310,9 +321,8 @@ public class TileMapMouse : MonoBehaviour {
 		}
 	}
 	
-	
 	//Upgrades the textboxes on the UI
-	void updateScoreText(){
+	public void updateScoreText(){
 		waterScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getWater();
 		foodScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getFood();
 		buildingScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getBuildingResources();
@@ -405,6 +415,8 @@ public class TileMapMouse : MonoBehaviour {
 		Debug.Log ("Creating new building info: " + newBuildingInfo.getName () + " " + newBuildingInfo.getCost () + " " + newBuildingInfo.getTurnsToBuild () + " " + newBuildingInfo.getLevel () + " " + newBuildingInfo.getPowered () + " " + newBuildingInfo.getPopulation ());
 		TGMap.map.GetTileAt ((int)selectedTileCoord.x, (int)selectedTileCoord.z).updateBulding (newBuildingInfo);
 		PlayerInfo.player.insertBase (newBuildingInfo);
+		audio.clip = baseSound;
+		audio.Play();
 		//Debug.Log ("After insert, number of bases: " + PlayerInfo.player.getBases ().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo);
 		//Debug.Log ("After insert: " + PlayerInfo.player.getConstructing ().Count);
@@ -430,6 +442,8 @@ public class TileMapMouse : MonoBehaviour {
 		Debug.Log("Creating new building info: " + newBuildingInfo.getName() + " " + newBuildingInfo.getCost() + " " + newBuildingInfo.getTurnsToBuild() + " " + newBuildingInfo.getLevel() + " " + newBuildingInfo.getPowered());
 		TGMap.map.GetTileAt((int)selectedTileCoord.x, (int)selectedTileCoord.z).updateBulding(newBuildingInfo);
 		PlayerInfo.player.insertBeacon(newBuildingInfo);
+		audio.clip = beaconSound;
+		audio.Play();
 		//Debug.Log("After insert, number of beacons: " + PlayerInfo.player.getBeacons().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo);
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
@@ -455,6 +469,8 @@ public class TileMapMouse : MonoBehaviour {
 		Debug.Log("Creating new building info: " + newBuildingInfo.getName() + " " + newBuildingInfo.getCost() + " " + newBuildingInfo.getTurnsToBuild() + " " + newBuildingInfo.getLevel() + " " + newBuildingInfo.getPowered());
 		TGMap.map.GetTileAt((int)selectedTileCoord.x, (int)selectedTileCoord.z).updateBulding(newBuildingInfo);
 		PlayerInfo.player.insertFarm(newBuildingInfo);
+		audio.clip = farmSound;
+		audio.Play();
 		//Debug.Log("After insert, number of farms: " + PlayerInfo.player.getFarms().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo); 
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
@@ -480,6 +496,8 @@ public class TileMapMouse : MonoBehaviour {
 		Debug.Log("Creating new building info: " + newBuildingInfo.getName() + " " + newBuildingInfo.getCost() + " " + newBuildingInfo.getTurnsToBuild() + " " + newBuildingInfo.getLevel() + " " + newBuildingInfo.getPowered());
 		TGMap.map.GetTileAt((int)selectedTileCoord.x, (int)selectedTileCoord.z).updateBulding(newBuildingInfo);
 		PlayerInfo.player.insertResearchLab(newBuildingInfo);
+		audio.clip = researchLabSound;
+		audio.Play();
 		//Debug.Log("After insert, number of research labs: " + PlayerInfo.player.getResearchlabs().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo); 
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
@@ -505,6 +523,8 @@ public class TileMapMouse : MonoBehaviour {
 		Debug.Log("Creating new building info: " + newBuildingInfo.getName() + " " + newBuildingInfo.getCost() + " " + newBuildingInfo.getTurnsToBuild() + " " + newBuildingInfo.getLevel() + " " + newBuildingInfo.getPowered());
 		TGMap.map.GetTileAt((int)selectedTileCoord.x, (int)selectedTileCoord.z).updateBulding(newBuildingInfo);
 		PlayerInfo.player.insertWarehouse(newBuildingInfo);
+		audio.clip = warehouseSound;
+		audio.Play();
 		//Debug.Log("After insert, number of warehouses: " + PlayerInfo.player.getWarehouses().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo); 
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
@@ -530,6 +550,8 @@ public class TileMapMouse : MonoBehaviour {
 		Debug.Log("Creating new building info: " + newBuildingInfo.getName() + " " + newBuildingInfo.getCost() + " " + newBuildingInfo.getReleaseAmount());
 		TGMap.map.GetTileAt((int)selectedTileCoord.x, (int)selectedTileCoord.z).updateBulding(newBuildingInfo);
 		PlayerInfo.player.insertFactory(newBuildingInfo);
+		audio.clip = factorySound;
+		audio.Play();
 		//Debug.Log("After insert, number of factories: " + PlayerInfo.player.getFactory().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo);
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
@@ -555,6 +577,8 @@ public class TileMapMouse : MonoBehaviour {
 		Debug.Log("Creating new building info: " + newBuildingInfo.getName() + " " + newBuildingInfo.getCost());
 		TGMap.map.GetTileAt((int)selectedTileCoord.x, (int)selectedTileCoord.z).updateBulding(newBuildingInfo);
 		PlayerInfo.player.insertPowerplant(newBuildingInfo);
+		audio.clip = powerPlantSound;
+		audio.Play();
 		//Debug.Log("After insert, number of power plants: " + PlayerInfo.player.getPowerplant().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo);
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
@@ -580,6 +604,8 @@ public class TileMapMouse : MonoBehaviour {
 		Debug.Log("Creating new building info: " + newBuildingInfo.getName() + " " + newBuildingInfo.getCost() + " " + newBuildingInfo.getTurnsToTurnOnMagnetosphere());
 		TGMap.map.GetTileAt((int)selectedTileCoord.x, (int)selectedTileCoord.z).updateBulding(newBuildingInfo);
 		PlayerInfo.player.insertMagnetosphere(newBuildingInfo);
+		audio.clip = magnetosphereMachineSound;
+		audio.Play();
 		//Debug.Log("After insert, number of magnetospheres: " + PlayerInfo.player.getMagnetosphere().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo);
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
@@ -605,6 +631,8 @@ public class TileMapMouse : MonoBehaviour {
 		Debug.Log("Creating new building info: " + newBuildingInfo.getName() + " " + newBuildingInfo.getCost() + " " + newBuildingInfo.getReleaseAmount());
 		TGMap.map.GetTileAt((int)selectedTileCoord.x, (int)selectedTileCoord.z).updateBulding(newBuildingInfo);
 		PlayerInfo.player.insertChemistryPlant(newBuildingInfo);
+		audio.clip = chemicalPlantSound;
+		audio.Play();
 		//Debug.Log("After insert, number of chemistry plants: " + PlayerInfo.player.getChemistryPlants().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo);
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
