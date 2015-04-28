@@ -22,7 +22,7 @@ public class GameControl : MonoBehaviour {
 
 	public void Save(){
 		BinaryFormatter bf = new BinaryFormatter ();
-		FileStream file = File.Create("/Users/lexus_mans/UnitySaves/playerInfo.dat");
+		FileStream file = File.Create(Application.persistentDataPath + "/playerInfo.dat");
 
 		PlayerData data = new PlayerData ();
 
@@ -37,9 +37,9 @@ public class GameControl : MonoBehaviour {
 		Debug.Log ("Saved Successfully"); 
 	}
 	public void Load(){
-		if (File.Exists ("/Users/lexus_mans/UnitySaves/playerInfo.dat")) {
+		if (File.Exists (Application.persistentDataPath + "/playerInfo.dat")) {
 			BinaryFormatter bf = new BinaryFormatter ();
-			FileStream file = File.Open ("/Users/lexus_mans/UnitySaves/playerInfo.dat", FileMode.Open);
+			FileStream file = File.Open (Application.persistentDataPath + "/playerInfo.dat", FileMode.Open);
 			PlayerData data = (PlayerData)bf.Deserialize (file);
 			file.Close ();
 
