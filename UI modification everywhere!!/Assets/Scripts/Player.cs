@@ -199,7 +199,14 @@ public class Player : MonoBehaviour {
 		setWater (loadedWater);
 		setFood (loadedFood);
 	}
+	/*
+	public void loadLists(List<Base>){
 
+	}
+	public void loadDictionaries(){
+	
+	}
+	*/
 	private void setCostsAtLevel1 (){
 		this.costsAtLevel1.Add ("Base", 250);
 		this.costsAtLevel1.Add ("Beacon", 150);

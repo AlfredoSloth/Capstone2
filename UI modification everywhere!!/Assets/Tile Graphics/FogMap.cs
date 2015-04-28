@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 public class FogMap : MonoBehaviour {
 	TGMap _tileMapGfx;
-	public static List<ResourceIcon> icons;
+	public static List<ResourceIcon> icons; //save map
 	void Start(){
 		_tileMapGfx = GetComponent<TGMap> ();
 	}
