@@ -4,19 +4,26 @@ public class Building {
 	private string name;
 	private int cost;
 	private int turnsToBuild;
+	private int turnsToUpgrade;
 	private int level;
 	private int posX;
 	private int posY;
 	private int powered; //0 = false; 1 = true; -1 = building not using this feature (Beacon and warehouse)
+	private string status;
 	
 	public Building(string name, int cost, int turnsToBuild, int level, int x, int y, int powered){
 		setName(name);
 		setCost(cost);
 		setTurnsToBuild (turnsToBuild);
+		setTurnsToUpgrade ();
 		setLevel(level);
 		setX (x);
 		setY (y);
 		setPowered (powered);
+		setStatus ();
+	}
+	private void setStatus(){
+		this.status = "Constructed";
 	}
 	private void setName(string name){
 		this.name = name;
@@ -27,8 +34,14 @@ public class Building {
 	private void setTurnsToBuild(int turnsToBuild){
 		this.turnsToBuild = turnsToBuild;
 	}
+	private void setTurnsToUpgrade(){
+		this.turnsToUpgrade = 0;
+	}
 	private void setLevel(int level){
 		this.level = level;
+	}
+	public string getStatus(){
+		return this.status;
 	}
 	public string getName(){
 		return this.name;
@@ -39,14 +52,23 @@ public class Building {
 	public int getTurnsToBuild(){
 		return this.turnsToBuild;
 	}
+	public int getTurnsToUpgrade(){
+		return this.turnsToUpgrade;
+	}
 	public int getLevel(){
 		return this.level;
+	}
+	public void updateStatus(string newStatus){
+		this.status = newStatus;
 	}
 	public void updateCost(int newCost){
 		this.cost = newCost;
 	}
 	public void updateTurns(int newTurns){
 		this.turnsToBuild = newTurns;
+	}
+	public void updateTurnsToUpgrade(int newUpgrade){
+		this.turnsToUpgrade = newUpgrade;
 	}
 	public void updateLevel(int newLevel){
 		this.level = newLevel;
@@ -144,6 +166,6 @@ public class Building {
 			stat = "N/A";
 		}
 		
-		return "Name: " + this.getName () + "\nLevel: " + this.getLevel () + "\nPowered: " + stat;
+		return "Name: " + this.getName () + "\nLevel: " + this.getLevel () + "\nStatus: " + this.getStatus() + "\nPowered: " + stat;
 	}
 }

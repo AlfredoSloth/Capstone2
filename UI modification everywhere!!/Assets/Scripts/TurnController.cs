@@ -60,6 +60,7 @@ public class TurnController : MonoBehaviour {
 		handleWarehouses ();
 		handlePopulation ();
 		handlePower ();
+		handleUpgrade ();
 		handleSafezones ();
 		handleConstruction ();
 		handleResearch ();
@@ -105,6 +106,26 @@ public class TurnController : MonoBehaviour {
 				turnsLeft--;
 				constructing.updateTurns(turnsLeft);
 				//Debug.Log ("turns left after decr:" + constructing.getTurnsToBuild());
+				index++;
+			}
+		}
+	}
+
+	void handleUpgrade(){
+		int index = 0;
+		foreach (Building upgrading in PlayerInfo.player.getUpgrading().ToArray()) {
+			//check turnsToBuild for each building in the constructing list
+			int turnsLeft = upgrading.getTurnsToUpgrade ();
+			Debug.Log ("turns left: " + turnsLeft);
+			if (turnsLeft != 0) {
+				turnsLeft--;
+				upgrading.updateTurnsToUpgrade(turnsLeft);
+				//Debug.Log ("turns left after decr:" + constructing.getTurnsToBuild());
+				if (turnsLeft == 0) {
+					upgrading.updateStatus ("Constructed");
+					PlayerInfo.player.removeUpgrading (index);
+					Debug.Log ("After remove: " + PlayerInfo.player.getConstructing ().Count);
+				}
 				index++;
 			}
 		}
@@ -214,6 +235,7 @@ public class TurnController : MonoBehaviour {
 			}
 		}
 	}
+
 	void handleOxygenLevel (){
 		/*A certain number that the release amount for the two factory types must reach to achieve the goal of 
 		 * terraforming (which would mean you’d have to track the total amount of PFCs and Phytoplankton in the 

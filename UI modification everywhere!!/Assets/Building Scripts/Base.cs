@@ -135,7 +135,7 @@ public class Base : Building {
 			stat = "N/A";
 		}
 		
-		return "Name: " + this.getName () + "\nLevel: " + this.getLevel() + "\nPowered: " + stat +  "\nPopulation: " + this.getPopulation();
+		return "Name: " + this.getName () + "\nLevel: " + this.getLevel() + "\nStatus: " + this.getStatus() + "\nPowered: " + stat +  "\nPopulation: " + this.getPopulation();
 	}
 	public void displayRange(){
 		int range = determineRange ();

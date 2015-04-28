@@ -308,23 +308,67 @@ public class TileMapMouse : MonoBehaviour {
 	
 	public void upgradeBuilding(){
 		Debug.Log ("Upgrade building");
-		if (build.getTurnsToBuild () == 0) {
+		if (build.getStatus () == "Constructed" && build.getLevel () == 1) {
 			if (resource >= build.getCost ()) {
+				//subtract cost from resources
 				resource = resource - build.getCost ();
 				Debug.Log ("cost:" + build.getCost ());
+				//update resource in player
 				PlayerInfo.player.updateBuildingResources (resource);
 				Debug.Log ("resource left:" + PlayerInfo.player.getBuildingResources ());
+				//update to new level
 				build.updateLevel (build.getLevel () + 1);
+				//update cost to next upgrade
 				build.updateCost (build.getCost () * 2);
 				Debug.Log ("cost for next level:" + build.getCost ());
+				build.updateStatus ("Upgrading to " + build.getLevel ());
+				PlayerInfo.player.insertUpgrading(build);
 				showBuildingStats (build);
 			} else {
 				bitext.GetComponent<Text> ().text = "Not enough resource!";
 				btnUpgrade.SetActive (false);
 			}
-		} else {
-			bitext.GetComponent<Text> ().text = "Constructing level " + build.getLevel () + "!";
-			btnUpgrade.SetActive (false);
+		} else if (build.getStatus () == "Constructed" && build.getLevel () == 2) {
+			if (resource >= build.getCost ()) {
+				//subtract cost from resources
+				resource = resource - build.getCost ();
+				Debug.Log ("cost:" + build.getCost ());
+				//update resource in player
+				PlayerInfo.player.updateBuildingResources (resource);
+				Debug.Log ("resource left:" + PlayerInfo.player.getBuildingResources ());
+				//update to new level
+				build.updateLevel (build.getLevel () + 1);
+				//update cost to next upgrade
+				build.updateCost (build.getCost () * 2);
+				Debug.Log ("cost for next level:" + build.getCost ());
+				build.updateStatus ("Upgrading to " + build.getLevel ());
+				
+				if(build is Base){
+					build.updateTurnsToUpgrade(PlayerInfo.player.getTurnsToBuildAtLevel1("Base") + 2);
+				}else if(build is Beacon){
+					build.updateTurnsToUpgrade(PlayerInfo.player.getTurnsToBuildAtLevel1("Beacon") + 2);
+				}else if(build is Farm){
+					build.updateTurnsToUpgrade(PlayerInfo.player.getTurnsToBuildAtLevel1("Farm") + 2);
+				}else if(build is ResearchLab){
+					build.updateTurnsToUpgrade(PlayerInfo.player.getTurnsToBuildAtLevel1("Research Lab") + 2);
+				}else if(build is Warehouse){
+					build.updateTurnsToUpgrade(PlayerInfo.player.getTurnsToBuildAtLevel1("Warehouse") + 2);
+				}else if(build is Factory){
+					build.updateTurnsToUpgrade(PlayerInfo.player.getTurnsToBuildAtLevel1("Factory") + 2);
+				}else if(build is Powerplant){
+					build.updateTurnsToUpgrade(PlayerInfo.player.getTurnsToBuildAtLevel1("Power Plant") + 2);
+				}else if(build is Magnetosphere){
+					build.updateTurnsToUpgrade(PlayerInfo.player.getTurnsToBuildAtLevel1("Magnetosphere") + 2);
+				}else if(build is ChemistryPlant){
+					build.updateTurnsToUpgrade(PlayerInfo.player.getTurnsToBuildAtLevel1("Chemistry Plant") + 2);
+				}else if(build is Rover){
+				}
+				PlayerInfo.player.insertUpgrading(build);
+				showBuildingStats (build);
+			} else {
+				bitext.GetComponent<Text> ().text = "Not enough resource!";
+				btnUpgrade.SetActive (false);
+			}
 		}
 	}
 	
@@ -399,7 +443,7 @@ public class TileMapMouse : MonoBehaviour {
 		bipanel.SetActive (true);
 		bitext.SetActive (true);
 		bitext.GetComponent<Text>().text = b.buildingStats();
-		if (b is Magnetosphere || b.getLevel() == 3) {
+		if (b is Magnetosphere || b.getLevel() == 3 || b.getStatus() != "Constructed") {
 			btnUpgrade.SetActive (false);
 		} else {
 			btnUpgrade.SetActive (true);
@@ -424,7 +468,7 @@ public class TileMapMouse : MonoBehaviour {
 		
 	}
 	void buildBasePrt2(){
-		Base newBuildingInfo = new Base ("Base", PlayerInfo.player.getCostAtLevel1 (place), 5, 1, (int)currentTileCoord.x, (int)currentTileCoord.z, 0, 2);
+		Base newBuildingInfo = new Base ("Base", PlayerInfo.player.getCostAtLevel1 (place), PlayerInfo.player.getTurnsToBuildAtLevel1(place), 1, (int)currentTileCoord.x, (int)currentTileCoord.z, 0, 2);
 		Debug.Log ("Creating new building info: " + newBuildingInfo.getName () + " " + newBuildingInfo.getCost () + " " + newBuildingInfo.getTurnsToBuild () + " " + newBuildingInfo.getLevel () + " " + newBuildingInfo.getPowered () + " " + newBuildingInfo.getPopulation ());
 		TGMap.map.GetTileAt ((int)selectedTileCoord.x, (int)selectedTileCoord.z).updateBulding (newBuildingInfo);
 		PlayerInfo.player.insertBase (newBuildingInfo);
@@ -433,6 +477,8 @@ public class TileMapMouse : MonoBehaviour {
 		//Debug.Log ("After insert, number of bases: " + PlayerInfo.player.getBases ().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo);
 		//Debug.Log ("After insert: " + PlayerInfo.player.getConstructing ().Count);
+		newBuildingInfo.updateStatus ("Constucting level 1");
+		newBuildingInfo.updateTurnsToUpgrade (PlayerInfo.player.getTurnsToBuildAtLevel1 (place) + 1);
 		//take off the cost to build level 1
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
@@ -460,6 +506,8 @@ public class TileMapMouse : MonoBehaviour {
 		//Debug.Log("After insert, number of beacons: " + PlayerInfo.player.getBeacons().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo);
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
+		newBuildingInfo.updateStatus ("Constucting level 1");
+		newBuildingInfo.updateTurnsToUpgrade (PlayerInfo.player.getTurnsToBuildAtLevel1 (place) + 1);
 		//take off the cost to build level 1
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
@@ -487,6 +535,8 @@ public class TileMapMouse : MonoBehaviour {
 		//Debug.Log("After insert, number of farms: " + PlayerInfo.player.getFarms().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo); 
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
+		newBuildingInfo.updateStatus ("Constucting level 1");
+		newBuildingInfo.updateTurnsToUpgrade (PlayerInfo.player.getTurnsToBuildAtLevel1 (place) + 1);
 		//take off the cost to build level 1
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
@@ -514,6 +564,8 @@ public class TileMapMouse : MonoBehaviour {
 		//Debug.Log("After insert, number of research labs: " + PlayerInfo.player.getResearchlabs().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo); 
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
+		newBuildingInfo.updateStatus ("Constucting level 1");
+		newBuildingInfo.updateTurnsToUpgrade (PlayerInfo.player.getTurnsToBuildAtLevel1 (place) + 1);
 		//take off the cost to build level 1
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
@@ -541,6 +593,8 @@ public class TileMapMouse : MonoBehaviour {
 		//Debug.Log("After insert, number of warehouses: " + PlayerInfo.player.getWarehouses().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo); 
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
+		newBuildingInfo.updateStatus ("Constucting level 1");
+		newBuildingInfo.updateTurnsToUpgrade (PlayerInfo.player.getTurnsToBuildAtLevel1 (place) + 1);
 		//take off the cost to build level 1
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
@@ -568,6 +622,8 @@ public class TileMapMouse : MonoBehaviour {
 		//Debug.Log("After insert, number of factories: " + PlayerInfo.player.getFactory().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo);
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
+		newBuildingInfo.updateStatus ("Constucting level 1");
+		newBuildingInfo.updateTurnsToUpgrade (PlayerInfo.player.getTurnsToBuildAtLevel1 (place) + 1);
 		//take off the cost to build level 1
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
@@ -595,6 +651,8 @@ public class TileMapMouse : MonoBehaviour {
 		//Debug.Log("After insert, number of power plants: " + PlayerInfo.player.getPowerplant().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo);
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
+		newBuildingInfo.updateStatus ("Constucting level 1");
+		newBuildingInfo.updateTurnsToUpgrade (PlayerInfo.player.getTurnsToBuildAtLevel1 (place) + 1);
 		//take off the cost to build level 1
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
@@ -622,6 +680,8 @@ public class TileMapMouse : MonoBehaviour {
 		//Debug.Log("After insert, number of magnetospheres: " + PlayerInfo.player.getMagnetosphere().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo);
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
+		newBuildingInfo.updateStatus ("Constucting level 1");
+		newBuildingInfo.updateTurnsToUpgrade (PlayerInfo.player.getTurnsToBuildAtLevel1 (place) + 1);
 		//take off the cost to build level 1
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
@@ -649,6 +709,8 @@ public class TileMapMouse : MonoBehaviour {
 		//Debug.Log("After insert, number of chemistry plants: " + PlayerInfo.player.getChemistryPlants().Count);
 		PlayerInfo.player.insertConstructing (newBuildingInfo);
 		//Debug.Log("After insert: " + PlayerInfo.player.getConstructing().Count);
+		newBuildingInfo.updateStatus ("Constucting level 1");
+		newBuildingInfo.updateTurnsToUpgrade (PlayerInfo.player.getTurnsToBuildAtLevel1 (place) + 1);
 		//take off the cost to build level 1
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();

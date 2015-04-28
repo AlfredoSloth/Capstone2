@@ -69,6 +69,6 @@ public class Beacon : Building {
 			stat = "N/A";
 		}
 		
-		return "Name: " + this.getName () + "\nLevel: " + this.getLevel() + "\nPowered: " + stat;
+		return "Name: " + this.getName () + "\nLevel: " + this.getLevel() + "\nStatus: " + this.getStatus() + "\nPowered: " + stat;
 	}
 }

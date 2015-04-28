@@ -63,7 +63,7 @@ public class Powerplant : Building {
 		} else {
 			stat = "N/A";
 		}
-		return "Name: " + this.getName () + "\nLevel: " + this.getLevel() + "\nPowered: " + stat + "\nTurns till enable: " + this.getTurnsTilEnable();
+		return "Name: " + this.getName () + "\nLevel: " + this.getLevel() + "\nStatus: " + this.getStatus() + "\nPowered: " + stat + "\nTurns till enable: " + this.getTurnsTilEnable();
 	}
 	
 	public int determineRange(){

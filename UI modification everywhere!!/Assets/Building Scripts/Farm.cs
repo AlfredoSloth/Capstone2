@@ -26,6 +26,6 @@
 			stat = "N/A";
 		}
 		
-		return "Name: " + this.getName () + "\nLevel: " + this.getLevel() + "\nPowered: " + stat + "\nFood gathering pts per turn: " + this.getGatherFoodAmount();
+		return "Name: " + this.getName () + "\nLevel: " + this.getLevel() + "\nStatus: " + this.getStatus() + "\nPowered: " + stat + "\nFood gathering pts per turn: " + this.getGatherFoodAmount();
 	}
 }

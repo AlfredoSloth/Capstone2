@@ -26,6 +26,6 @@
 			stat = "N/A";
 		}
 		
-		return "Name: " + this.getName () + "\nLevel: " + this.getLevel() + "\nPowered: " + stat + "\nResearch pts per turn: " + this.getResearchAmount();
+		return "Name: " + this.getName () + "\nLevel: " + this.getLevel() + "\nStatus: " + this.getStatus() + "\nPowered: " + stat + "\nResearch pts per turn: " + this.getResearchAmount();
 	}
 }

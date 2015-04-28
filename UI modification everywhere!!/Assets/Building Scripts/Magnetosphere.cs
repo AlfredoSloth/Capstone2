@@ -28,6 +28,6 @@
 			stat = "N/A";
 		}
 		
-		return "Name: " + this.getName () + "\nPowered: " + stat + "\nTurns left until operation: " + this.getTurnsToTurnOnMagnetosphere();
+		return "Name: " + this.getName () + "\nStatus: " + this.getStatus() + "\nPowered: " + stat + "\nTurns left until operation: " + this.getTurnsToTurnOnMagnetosphere();
 	}
 }

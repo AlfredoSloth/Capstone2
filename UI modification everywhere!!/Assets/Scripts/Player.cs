@@ -11,6 +11,7 @@ public class Player : MonoBehaviour {
 	private Dictionary<string, int> turnsToBuildAtLevel1;
 	private List<Research> technologies;
 	private List<Building> constructing;
+	private List<Building> upgrading;
 	private List<Base> bases;
 	private List<Beacon> beacons;
 	private List<ChemistryPlant> chemistryplants;
@@ -35,6 +36,7 @@ public class Player : MonoBehaviour {
 		technologies = new List<Research> ();
 
 		constructing = new List<Building> ();
+		upgrading = new List<Building> ();
 		bases = new List<Base> ();
 		beacons = new List<Beacon> ();
 		chemistryplants = new List<ChemistryPlant> ();
@@ -75,6 +77,9 @@ public class Player : MonoBehaviour {
 	
 	public List<Building> getConstructing(){
 		return this.constructing;
+	}
+	public List<Building> getUpgrading(){
+		return this.upgrading;
 	}
 	public List<Base> getBases(){
 		return this.bases;
@@ -129,6 +134,9 @@ public class Player : MonoBehaviour {
 	public void insertConstructing(Building newConstruct){
 		constructing.Add(newConstruct);
 	}
+	public void insertUpgrading(Building newUpgrade){
+		upgrading.Add(newUpgrade);
+	}
 	public void insertBase(Base newBase){
 		bases.Add(newBase);
 	}
@@ -162,6 +170,9 @@ public class Player : MonoBehaviour {
 	
 	public void removeConstructing(int index){
 		constructing.RemoveAt (index);
+	}
+	public void removeUpgrading(int index){
+		upgrading.RemoveAt (index);
 	}
 	public void removeBase(int index){
 		bases.RemoveAt (index);
