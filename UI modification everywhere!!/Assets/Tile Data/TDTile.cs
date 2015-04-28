@@ -41,16 +41,13 @@ public class TDTile{
 			}else if (type > 80 && type<= 90) {
 				this.terrainType = 3;
 			}
-			else if (type > 90 && type <= 100) {
-				this.terrainType = 0;
-			}
 		} else {
 			if (type >= 1 && type <= 80) {
 				this.terrainType=1;
 			} else if (type > 85 && type <= 87) {
 				this.terrainType=3;
 			} else if (type > 87 && type <= 95) {
-				this.terrainType=1;
+				this.terrainType=0;
 			} else if (type > 95 && type <= 100) {
 				this.terrainType=2;
 			}
@@ -134,6 +131,9 @@ public class TDTile{
 	public void updateTerriform(int newTerriform){
 		
 		this.terraformed = newTerriform;
+	}
+	public void updateTerrainType(int terrainType){
+		this.terrainType = terrainType;
 	}
 	public void updateHasRover(Rover newValue){
 		this.hasRover = newValue;

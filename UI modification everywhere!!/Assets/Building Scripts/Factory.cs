@@ -22,6 +22,7 @@
 	
 	public override string buildingStats()
 	{
+		string worked;
 		string stat;
 		if (this.getPowered() == 0) {
 			stat = "false";
@@ -30,8 +31,12 @@
 		} else {
 			stat = "N/A";
 		}
-		
-		return "Name: " + this.getName () + "\nLevel: " + this.getLevel() + "\nStatus: " + this.getStatus() + "\nPowered: " + stat + "\nRelease amount: " + this.getReleaseAmount();
+		if (this.getWorked () == true)
+			worked = "Worked";
+		else
+			worked = "Not being worked";
+
+		return "Name: " + this.getName () + "\nLevel: " + this.getLevel() + "\nStatus: " + this.getStatus() + "\nPowered: " + stat + "\nRelease amount: " + this.getReleaseAmount()+ "\n"+worked;
 	}
 	
 }

@@ -10,7 +10,7 @@ public class Building {
 	private int posY;
 	private int powered; //0 = false; 1 = true; -1 = building not using this feature (Beacon and warehouse)
 	private string status;
-	
+	private bool worked;
 	public Building(string name, int cost, int turnsToBuild, int level, int x, int y, int powered){
 		setName(name);
 		setCost(cost);
@@ -21,6 +21,7 @@ public class Building {
 		setY (y);
 		setPowered (powered);
 		setStatus ();
+		worked = false;
 	}
 	private void setStatus(){
 		this.status = "Constructed";
@@ -58,11 +59,17 @@ public class Building {
 	public int getLevel(){
 		return this.level;
 	}
+	public bool getWorked(){
+		return this.worked;
+	}
 	public void updateStatus(string newStatus){
 		this.status = newStatus;
 	}
 	public void updateCost(int newCost){
 		this.cost = newCost;
+	}
+	public void updateWorked(bool worked){
+		this.worked = worked;
 	}
 	public void updateTurns(int newTurns){
 		this.turnsToBuild = newTurns;
@@ -157,6 +164,7 @@ public class Building {
 		}
 	}
 	public virtual string buildingStats(){
+		string worked;
 		string stat;
 		if (this.getPowered() == 0) {
 			stat = "false";
@@ -165,7 +173,11 @@ public class Building {
 		} else {
 			stat = "N/A";
 		}
-		
-		return "Name: " + this.getName () + "\nLevel: " + this.getLevel () + "\nStatus: " + this.getStatus() + "\nPowered: " + stat;
+		if (this.getWorked () == true)
+			worked = "Worked";
+		else
+			worked = "Not being worked";
+
+		return "Name: " + this.getName () + "\nLevel: " + this.getLevel () + "\nStatus: " + this.getStatus() + "\nPowered: " + stat+"\n"+worked;
 	}
 }

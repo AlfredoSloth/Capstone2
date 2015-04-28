@@ -82,13 +82,15 @@ public class FogMap : MonoBehaviour {
 				GameObject resourceIcon = Instantiate(Resources.Load("BuildingResourcePrefab"), location, Quaternion.Euler(new Vector3(-42,180,0))) as GameObject;
 				//Transform thing = resourceIcon.;
 				//Debug.Log(resourceIcon);
-
+				
 				Material newMaterial;
 				newMaterial = new Material(Shader.Find("Transparent/Diffuse"));
 				foreach(Transform shape in resourceIcon.transform){
 					shape.renderer.material = newMaterial;
 					shape.renderer.material.color = new Color32(255,174,0,180);
 				}
+				newIcons.xposition = x;
+				newIcons.yposition = y;
 				newIcons.icons.Add(resourceIcon);
 				//Debug.Log (newIcons);
 				//Debug.Log("Checking " + x + y);
@@ -115,11 +117,26 @@ public class FogMap : MonoBehaviour {
 					shape.renderer.material.color = new Color32(0,181,255,50);
 					
 				}
+				newIcons.xposition = x;
+				newIcons.yposition = y;
 				newIcons.icons.Add(resourceIcon);
 				//Debug.Log (newIcons);
 			}
 		}
 		icons.Add (newIcons);
+		/*foreach(ResourceIcon icon in FogMap.icons){
+			Debug.Log("first level");
+			Debug.Log(icon.xposition + icon.yposition);
+			Debug.Log (icon.icons);
+			foreach(GameObject iconObject in icon.icons){
+				Debug.Log("second level");
+				foreach(Transform iconColorChange in iconObject.transform){
+					//Color32 thing = new Color32(0,0,0,0);
+					Debug.Log("third level");
+					//icon.renderer.material.color = new Color32(0,0,0,0);
+				}
+			}
+		}*/
 	}
 	public void updateColor(int tileType, Transform tile, bool iceCheck){
 		Color32 newColor = new Color32();

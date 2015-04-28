@@ -27,7 +27,25 @@ public class Powerplant : Building {
 			}
 		}
 	}
-	
+	public void powerDown(){
+		int range = determineRange ();
+		Debug.Log (getX ());
+		for(int x=getX ()-range; x<getX ()+range+1; x++){
+			for(int y=getY ()-range; y<getY ()+range+1; y++){
+				//(get tile data and see if there is a building or not)
+				Debug.Log("Checking for buildings to power up at" + x + " " + y);
+				Building check = TGMap.map.GetTileAt(x, y).getBuilding();
+				if(check!=null){
+					Debug.Log("Building Found at " + x + " " + y);
+					if(check.getTurnsToBuild() == 0 && check.getPowered() == 1){
+						Debug.Log("Powering up " + check);
+						check.updatePowered(0);
+						Debug.Log("type: " + check.GetType() + " powered: " + check.getPowered());
+					}
+				}
+			}
+		}
+	}
 	private void setTurnsTilEnable(int turns){
 		this.turnsTilEnable = turns;
 	}
@@ -46,15 +64,16 @@ public class Powerplant : Building {
 			for(int y=getY ()-range; y<getY ()+range+1; y++){
 				if(TGMap.elevationMap[x,y].FindChild("pCube4")){
 					Transform thingything = TGMap.elevationMap[x,y].FindChild("pCube4");
-					thingything.renderer.material.color = new Color32(255,255,51,255);
+					thingything.renderer.material.color = new Color32(226,236,51,255);
 				}
 				else{
-					TGMap.elevationMap[x,y].renderer.material.color = new Color32(255,255,51,255);
+					TGMap.elevationMap[x,y].renderer.material.color = new Color32(226,236,51,255);
 				}
 			}
 		}
 	}
 	public override string buildingStats(){
+		string worked;
 		string stat;
 		if (this.getPowered() == 0) {
 			stat = "false";
@@ -63,7 +82,12 @@ public class Powerplant : Building {
 		} else {
 			stat = "N/A";
 		}
-		return "Name: " + this.getName () + "\nLevel: " + this.getLevel() + "\nStatus: " + this.getStatus() + "\nPowered: " + stat + "\nTurns till enable: " + this.getTurnsTilEnable();
+		if (this.getWorked () == true)
+			worked = "Worked";
+		else
+			worked = "Not being worked";
+
+		return "Name: " + this.getName () + "\nLevel: " + this.getLevel() + "\nStatus: " + this.getStatus() + "\nPowered: " + stat + "\nTurns till enable: " + this.getTurnsTilEnable()+ "\n"+worked;
 	}
 	
 	public int determineRange(){

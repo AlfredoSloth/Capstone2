@@ -49,10 +49,10 @@ public class Beacon : Building {
 			for(int y=getY ()-range; y<getY ()+range+1; y++){
 				if(TGMap.elevationMap[x,y].FindChild("pCube4")){
 					Transform thingything = TGMap.elevationMap[x,y].FindChild("pCube4");
-					thingything.renderer.material.color = new Color32(0,255,0,255);
+					thingything.renderer.material.color = new Color32(112,253,112,255);
 				}
 				else{
-					TGMap.elevationMap[x,y].renderer.material.color = new Color32(0,255,0,255);
+					TGMap.elevationMap[x,y].renderer.material.color = new Color32(112,253,112,255);
 				}
 			}
 		}

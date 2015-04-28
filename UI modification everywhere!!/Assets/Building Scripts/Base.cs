@@ -5,11 +5,12 @@ public class Base : Building {
 	private int population;
 	private Warehouse supplier;
 	private int turnsFed;
-	
+	private List<Building> buildingsBeingWorked;
 	public Base(string name, int cost, int turnsToBuild, int level, int x, int y, int powered, int population) : base(name, cost, turnsToBuild, level, x, y, powered){
 		setPopulation (population);
 		setSupplier ();
 		setTurnsFed ();
+		buildingsBeingWorked = new List<Building>();
 	}
 
 	private void setSupplier(){
@@ -52,6 +53,9 @@ public class Base : Building {
 		this.population = newPopulation;
 	}
 
+	public List<Building> getBuildingsBeingWorked(){
+		return this.buildingsBeingWorked;
+	}
 	private void setTurnsFed(){
 		this.turnsFed = 0;
 	}
@@ -60,6 +64,28 @@ public class Base : Building {
 	}
 	public void updateTurnsFed(int turns){
 		this.turnsFed = turns;
+	}
+	public void insertBuilding(Building newBuilding){
+		buildingsBeingWorked.Add (newBuilding);
+	}
+	public void workTiles(){
+		int range = determineRange ();
+		int resourceSum = 0;
+		int populationToWork = getPopulation ();
+		populationToWork -= getBuildingsBeingWorked().Count;
+		for (int x=getX ()-range; x<getX ()+range+1; x++) {
+			for (int y=getY ()-range; y<getY ()+range+1; y++) {
+				Building check = TGMap.map.GetTileAt(x,y).getBuilding();
+				//Debug.Log(check);
+				Debug.Log(buildingsBeingWorked.Count);
+				if(check!=null&&populationToWork!=0&&!(check is Base)&&check.getWorked()==false&&!(check is Beacon)&&check.getTurnsToBuild()==0){
+					if(check is Farm)
+						Debug.Log("found a farm");
+					check.updateWorked(true);
+					insertBuilding(check);
+				}
+			}
+		}
 	}
 	public int gatherBuildingResources(){
 		int range = determineRange ();

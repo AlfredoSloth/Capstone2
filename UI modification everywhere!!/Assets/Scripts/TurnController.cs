@@ -8,7 +8,7 @@ public class TurnController : MonoBehaviour {
 	//turn properties
 	public static TurnSystem turn;
 	private int moveCount; //counter for number of available moves during current turn
-	
+	public int turnNum;
 	//notifications for testing purpose
 	GameObject bipanel, bitext;
 	public GUIText warningMessage;
@@ -30,7 +30,9 @@ public class TurnController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		turn = new TurnSystem (1);
+		if (turnNum == 0)
+			turnNum = 1;
+		turn = new TurnSystem (turnNum);
 		Debug.Log ("Turn number: " + turn.getTurnNum());
 		moveCount = 0;
 		//Find the UI objects
@@ -59,6 +61,7 @@ public class TurnController : MonoBehaviour {
 		
 		handleWarehouses ();
 		handlePopulation ();
+		handleWorking ();
 		handlePower ();
 		handleUpgrade ();
 		handleSafezones ();
@@ -70,7 +73,10 @@ public class TurnController : MonoBehaviour {
 		handleMagnetosphere ();
 		handleOxygenLevel ();
 		handleTemperature ();
-		
+		handleHelpSupportSystem (turn.getTurnNum());
+		handleTerraforming ();
+		handleRandomEvents ();
+		turnNum++;
 		//moveCount = 0;
 		
 	}
@@ -143,11 +149,16 @@ public class TurnController : MonoBehaviour {
 			}
 		}
 	}
-	
+	void handleWorking(){
+		foreach (Base base1 in PlayerInfo.player.getBases().ToArray()) {
+			if(base1.getTurnsToBuild() == 0)
+				base1.workTiles();
+		}
+	}
 	void handleWarehouses(){
 		foreach (Warehouse warehouse in PlayerInfo.player.getWarehouses().ToArray()) {
 			//if warehouse is done constructing
-			if(warehouse.getTurnsToBuild() == 0){
+			if(warehouse.getTurnsToBuild() == 0&&warehouse.getWorked()==true&&warehouse.getPowered()==1){
 				if (warehouse.getSupplying () == null) {
 					warehouse.supplyBase ();
 				} else {				
@@ -168,13 +179,12 @@ public class TurnController : MonoBehaviour {
 	void handlePower(){
 		int powered;
 		foreach (Powerplant plant in PlayerInfo.player.getPowerplant()) {
-			if(plant.getTurnsToBuild() == 0){
+			if(plant.getTurnsToBuild() == 0&&plant.getTurnsTilEnable()==0&&plant.getWorked()==true){
 				//check if plant is powered on to power buildings around it
-				powered = plant.getPowered();
-				Debug.Log("Checking to see if plant ");
-				if(powered == 1){
-					plant.powerUp();
-				}
+				plant.powerUp();
+			}
+			else if(plant.getTurnsTilEnable()>=1){
+				plant.updateTurnsTilEnable(plant.getTurnsTilEnable()-1);
 			}
 		}
 	}
@@ -189,7 +199,7 @@ public class TurnController : MonoBehaviour {
 			//check if machine is powered on to start or continue countdown to turn on the machine
 			powered = machine.getPowered();
 			Debug.Log("powered: " + powered);
-			if(powered == 1){
+			if(powered == 1&&machine.getWorked()==true&&machine.getTurnsToBuild()==0){
 				//checks magnetosphere countdown
 				countdown = machine.getTurnsToTurnOnMagnetosphere();
 				Debug.Log ("countdown: " + countdown);
@@ -207,30 +217,33 @@ public class TurnController : MonoBehaviour {
 	void handleResearch(){
 		//Debug.Log ("Labs gathing research "+PlayerInfo.player.getResearchlabs().Count);
 		foreach (ResearchLab lab in PlayerInfo.player.getResearchlabs()) {
-
-			PlayerInfo.player.updateResearch(lab.getResearchAmount());
+			if(lab.getPowered()==1&&lab.getWorked()==true&&lab.getTurnsToBuild()==0){
+				PlayerInfo.player.updateResearch(lab.getResearchAmount());
+			}
 			//Debug.Log (PlayerInfo.player.getResearch());
 			//Debug.Log (lab.getResearchAmount());
 		}
 	}
 	void handleFoodGathering(){
-		//Debug.Log ("Farms gathing food "+PlayerInfo.player.getFarms().Count);
 		foreach (Farm farm in PlayerInfo.player.getFarms()) {
-			PlayerInfo.player.updateFood(farm.getGatherFoodAmount());
+			if(farm.getPowered()==1&&farm.getWorked()==true&&farm.getTurnsToBuild()==0)
+				PlayerInfo.player.updateFood(farm.getGatherFoodAmount());
 			//Debug.Log (PlayerInfo.player.getFood());
 		}
 	}
 	void handleWaterGathering(){
 		//Debug.Log ("Bases gathing water "+PlayerInfo.player.getBases().Count);
 		foreach (Base specificBase in PlayerInfo.player.getBases()) {
-			PlayerInfo.player.updateWater(specificBase.gatherWater());
+			if(specificBase.getTurnsToBuild()==0&&specificBase.getPowered()==1){
+				PlayerInfo.player.updateWater(specificBase.gatherWater());
+			}
 			//Debug.Log (PlayerInfo.player.getWater());
 		}
 	}
 	void handleBuildingResourceGathering(){
 		Debug.Log ("Bases gathing building resources "+PlayerInfo.player.getBases().Count);
 		foreach (Base specificBase in PlayerInfo.player.getBases()) {
-			if(specificBase.getTurnsToBuild()==0){
+			if(specificBase.getTurnsToBuild()==0&&specificBase.getPowered()==1){
 				PlayerInfo.player.updateBuildingResources(specificBase.gatherBuildingResources());
 			}
 		}
@@ -246,7 +259,7 @@ public class TurnController : MonoBehaviour {
 		foreach (ChemistryPlant factory in PlayerInfo.player.getChemistryPlants()) {
 			//check mars oxygen level
 			oxygenLevel = PlayerInfo.mars.getMarsOxygen();
-			if(oxygenLevel != 0.21f){
+			if(oxygenLevel < 0.21f&&factory.getTurnsToBuild()==0&&factory.getPowered()==1){
 				//check if factory is powered on to release
 				powered = factory.getPowered();
 				if(powered == 1){
@@ -264,7 +277,7 @@ public class TurnController : MonoBehaviour {
 		foreach (Factory factory in PlayerInfo.player.getFactory()) {
 			//check mars oxygen level
 			tempt = PlayerInfo.mars.getAverageTemp();
-			if(tempt != 61){
+			if(tempt < 61){
 				//check if factory is powered on to release
 				powered = factory.getPowered();
 				if(powered == 1){
@@ -329,7 +342,7 @@ public class TurnController : MonoBehaviour {
 						FogMap functions = new FogMap ();
 						//if the tile is not visable then change it to visable and display the resource icon
 						if (TGMap.map.GetTileAt (richResourceXPos, richResourceZPos).getIsVisable () == false) {
-
+							
 							functions.checkFogForTile (richResourceXPos, richResourceZPos);
 						}
 						//else if it's already visable then check to see if there are resource icons there, if not then create some
@@ -347,93 +360,65 @@ public class TurnController : MonoBehaviour {
 				}
 				//negative
 				else {
-					//	Meteor Impact - destroys anything structure/unit on specific tiles
-					bool hasBuilding=true;
-					List<BoolCheck> playerHasBuildings = new List<BoolCheck>();
-					if(PlayerInfo.player.getFarms().Count>0){
-						string name = "farm";
-						BoolCheck newBoolCheck = new BoolCheck();
-						newBoolCheck.name=name;
-						newBoolCheck.hasBuilding=hasBuilding;
-						playerHasBuildings.Add(newBoolCheck);
+					int whichNegative = Random.Range(1,100);
+					//Cyclones - destroys structures
+					if(whichNegative>=1&&whichNegative<=20){
+						List<BoolCheck> playerHasBuildings = new List<BoolCheck>();
+						playerHasBuildings = pickRandomBuildingsList();
+						pickRandomBuildingDestroy(playerHasBuildings);
 					}
-					else if(PlayerInfo.player.getResearchlabs().Count>0){
-						string name = "research";
-						BoolCheck newBoolCheck = new BoolCheck();
-						newBoolCheck.name=name;
-						newBoolCheck.hasBuilding=hasBuilding;
-						playerHasBuildings.Add(newBoolCheck);
+					//Gamma Ray Burst - lowers production or population on specific structures
+					else if(whichNegative>20&&whichNegative<=40){
+						List<BoolCheck> playerHasBuildings = new List<BoolCheck>();
+						playerHasBuildings = pickRandomBuildingsList();
+						pickRandomBuildingReduce(playerHasBuildings);
 					}
-					else if(PlayerInfo.player.getFactory().Count>0){
-						string name = "factory";
-						BoolCheck newBoolCheck = new BoolCheck();
-						newBoolCheck.name=name;
-						newBoolCheck.hasBuilding=hasBuilding;
-						playerHasBuildings.Add(newBoolCheck);
-					}
-					else if(PlayerInfo.player.getWarehouses().Count>0){
-						string name = "warehouse";
-						BoolCheck newBoolCheck = new BoolCheck();
-						newBoolCheck.name=name;
-						newBoolCheck.hasBuilding=hasBuilding;
-						playerHasBuildings.Add(newBoolCheck);
-					}
-					else if(PlayerInfo.player.getChemistryPlants().Count>0){
-						string name = "chemical";
-						BoolCheck newBoolCheck = new BoolCheck();
-						newBoolCheck.name=name;
-						newBoolCheck.hasBuilding=hasBuilding;
-						playerHasBuildings.Add(newBoolCheck);
-					}
-					else if(PlayerInfo.player.getPowerplant().Count>0){
-						string name = "power";
-						BoolCheck newBoolCheck = new BoolCheck();
-						newBoolCheck.name=name;
-						newBoolCheck.hasBuilding=hasBuilding;
-						playerHasBuildings.Add(newBoolCheck);
-					}
-					int meteorTarget = Random.Range (0, playerHasBuildings.Count);
-					int i = 0;
-					if(playerHasBuildings.Count>0){
-						foreach(BoolCheck check in playerHasBuildings){
-							if(i==meteorTarget){
-								int j;
-								switch(check.name){
-								case "farm":
-									j = Random.Range(0,PlayerInfo.player.getFarms().Count);
-									meteorImpact(j, check.name);
-									break;
-								case "research":
-									j = Random.Range(0,PlayerInfo.player.getResearchlabs().Count);
-									meteorImpact(j, check.name);
-									break;
-								case "factory":
-									j = Random.Range(0,PlayerInfo.player.getFactory().Count);
-									meteorImpact(j, check.name);
-									break;
-								case "warehouse":
-									j = Random.Range(0,PlayerInfo.player.getWarehouses().Count);
-									meteorImpact(j, check.name);
-									break;
-								case "chemical":
-									j = Random.Range(0,PlayerInfo.player.getChemistryPlants().Count);
-									meteorImpact(j, check.name);
-									break;
-								case "power":
-									j = Random.Range(0,PlayerInfo.player.getPowerplant().Count);
-									meteorImpact(j, check.name);
-									break;
+					//	Disease - lowers population in mars base
+					else if(whichNegative>40&&whichNegative<=60){
+						int randomBases = Random.Range(0,PlayerInfo.player.getBases().Count-1);
+						int i=0;
+						if(PlayerInfo.player.getBases().Count>1){
+							foreach(Base sBase in PlayerInfo.player.getBases()){
+								if(i==randomBases&&sBase.getPopulation()>1){
+									sBase.updatePopulation(sBase.getPopulation()/2);
 								}
-
-							}
-							else{
-								i++;
+								else {
+									i++;
+								}
 							}
 						}
 					}
+					//	Power Failure - power plant stops functioning
+					else if(whichNegative>60&&whichNegative<=80){
+						int randomPowerPlant = Random.Range(0,PlayerInfo.player.getPowerplant().Count-1);
+						int i=0;
+						if(PlayerInfo.player.getPowerplant().Count>1){
+							foreach(Powerplant plant in PlayerInfo.player.getPowerplant()){
+								if(i==randomPowerPlant&&plant.getTurnsTilEnable()==0){
+									plant.powerDown();
+									plant.updateTurnsTilEnable(5);
+								}
+								else
+									i++;
+							}
+						}
+					}
+					//	Meteor Impact - destroys anything structure/unit on specific tiles
+					else if(whichNegative>80&&whichNegative<=100){
+						List<BoolCheck> playerHasBuildings = new List<BoolCheck>();
+						playerHasBuildings = pickRandomBuildingsList();
+						pickRandomBuildingDestroy(playerHasBuildings);
+					}
+					
+					
+					
+					
+					
+					
+					
 				}
-
-
+				
+				
 			} else {
 				turnsSinceRandomEvent++;
 			}
@@ -441,11 +426,11 @@ public class TurnController : MonoBehaviour {
 			//Gamma Ray Burst - lowers production or population on specific structures
 			//	Disease - lowers population in mars base
 			//	Power Failure - power plant stops functioning
-
-
+			
+			
 		}
 	}
-	void meteorImpact(int targetIndex, string targetType){
+	void destroyBuilding(int targetIndex, string targetType){
 		int i = 0;
 		switch (targetType) {
 		case "farm":
@@ -527,7 +512,254 @@ public class TurnController : MonoBehaviour {
 				}
 			}
 			break;
-
+			
+		}
+	}
+	List<BoolCheck> pickRandomBuildingsList(){
+		bool hasBuilding=true;
+		List<BoolCheck> playerHasBuildings = new List<BoolCheck>();
+		if(PlayerInfo.player.getFarms().Count>0){
+			string name = "farm";
+			BoolCheck newBoolCheck = new BoolCheck();
+			newBoolCheck.name=name;
+			newBoolCheck.hasBuilding=hasBuilding;
+			playerHasBuildings.Add(newBoolCheck);
+		}
+		else if(PlayerInfo.player.getResearchlabs().Count>0){
+			string name = "research";
+			BoolCheck newBoolCheck = new BoolCheck();
+			newBoolCheck.name=name;
+			newBoolCheck.hasBuilding=hasBuilding;
+			playerHasBuildings.Add(newBoolCheck);
+		}
+		else if(PlayerInfo.player.getFactory().Count>0){
+			string name = "factory";
+			BoolCheck newBoolCheck = new BoolCheck();
+			newBoolCheck.name=name;
+			newBoolCheck.hasBuilding=hasBuilding;
+			playerHasBuildings.Add(newBoolCheck);
+		}
+		else if(PlayerInfo.player.getWarehouses().Count>0){
+			string name = "warehouse";
+			BoolCheck newBoolCheck = new BoolCheck();
+			newBoolCheck.name=name;
+			newBoolCheck.hasBuilding=hasBuilding;
+			playerHasBuildings.Add(newBoolCheck);
+		}
+		else if(PlayerInfo.player.getChemistryPlants().Count>0){
+			string name = "chemical";
+			BoolCheck newBoolCheck = new BoolCheck();
+			newBoolCheck.name=name;
+			newBoolCheck.hasBuilding=hasBuilding;
+			playerHasBuildings.Add(newBoolCheck);
+		}
+		else if(PlayerInfo.player.getPowerplant().Count>0){
+			string name = "power";
+			BoolCheck newBoolCheck = new BoolCheck();
+			newBoolCheck.name=name;
+			newBoolCheck.hasBuilding=hasBuilding;
+			playerHasBuildings.Add(newBoolCheck);
+		}
+		return playerHasBuildings;
+	}
+	void pickRandomBuildingDestroy(List<BoolCheck> playerHasBuildings){
+		int target = Random.Range (0, playerHasBuildings.Count-1);
+		int i = 0;
+		if(playerHasBuildings.Count>0){
+			foreach(BoolCheck check in playerHasBuildings){
+				if(i==target){
+					int j;
+					switch(check.name){
+					case "farm":
+						j = Random.Range(0,PlayerInfo.player.getFarms().Count-1);
+						destroyBuilding(j, check.name);
+						break;
+					case "research":
+						j = Random.Range(0,PlayerInfo.player.getResearchlabs().Count-1);
+						destroyBuilding(j, check.name);
+						break;
+					case "factory":
+						j = Random.Range(0,PlayerInfo.player.getFactory().Count-1);
+						destroyBuilding(j, check.name);
+						break;
+					case "warehouse":
+						j = Random.Range(0,PlayerInfo.player.getWarehouses().Count-1);
+						destroyBuilding(j, check.name);
+						break;
+					case "chemical":
+						j = Random.Range(0,PlayerInfo.player.getChemistryPlants().Count-1);
+						destroyBuilding(j, check.name);
+						break;
+					case "power":
+						j = Random.Range(0,PlayerInfo.player.getPowerplant().Count-1);
+						destroyBuilding(j, check.name);
+						break;
+					}
+					
+				}
+				else{
+					i++;
+				}
+			}
+		}
+	}
+	void pickRandomBuildingReduce(List<BoolCheck> playerHasBuildings){
+		foreach (BoolCheck check in playerHasBuildings) {
+			if(check.name.Equals("warehouse")){
+				playerHasBuildings.Remove(check);
+			}
+			else if(check.name.Equals("warehouse")){
+				playerHasBuildings.Remove(check);
+			}
+		}
+		int target = Random.Range (0, playerHasBuildings.Count-1);
+		int i = 0;
+		if(playerHasBuildings.Count>0){
+			foreach(BoolCheck check in playerHasBuildings){
+				if(i==target){
+					int j;
+					switch(check.name){
+					case "farm":
+						j = Random.Range(0,PlayerInfo.player.getFarms().Count-1);
+						destroyBuilding(j, check.name);
+						break;
+					case "research":
+						j = Random.Range(0,PlayerInfo.player.getResearchlabs().Count-1);
+						destroyBuilding(j, check.name);
+						break;
+					case "factory":
+						j = Random.Range(0,PlayerInfo.player.getFactory().Count-1);
+						destroyBuilding(j, check.name);
+						break;
+					case "chemical":
+						j = Random.Range(0,PlayerInfo.player.getChemistryPlants().Count-1);
+						destroyBuilding(j, check.name);
+						break;
+					}
+					
+				}
+				else{
+					i++;
+				}
+			}
+		}
+	}
+	void reduceProduction(int targetIndex, string targetType){
+		int i = 0;
+		switch (targetType) {
+		case "farm":
+			List<Farm> farms = PlayerInfo.player.getFarms ();
+			foreach (Farm farm in farms) {
+				if (i == targetIndex) {
+					farm.updateGatherFoodAmount(farm.getGatherFoodAmount()/2);
+				} else {
+					i++;
+				}
+			}
+			break;
+		case "research":
+			List<ResearchLab> labs = PlayerInfo.player.getResearchlabs ();
+			foreach (ResearchLab lab in labs) {
+				if (i == targetIndex) {
+					lab.updateResearchAmount(lab.getResearchAmount()/2);
+				} else {
+					i++;
+				}
+			}
+			break;
+		case "factory":
+			List<Factory> factories = PlayerInfo.player.getFactory ();
+			foreach (Factory factory in factories) {
+				if (i == targetIndex) {
+					factory.updateReleaseAmount(factory.getReleaseAmount()/2);
+				} else {
+					i++;
+				}
+			}
+			break;
+		case "chemical":
+			List<ChemistryPlant> chemicalplants = PlayerInfo.player.getChemistryPlants ();
+			foreach (ChemistryPlant chemicalplant in chemicalplants) {
+				if (i == targetIndex) {
+					chemicalplant.updateReleaseAmount(chemicalplant.getReleaseAmount()/2);
+				} else {
+					i++;
+				}
+			}
+			break;
+		}
+	}
+	void handleHelpSupportSystem(int turnNum){
+		if (turnNum % 5==0) {
+			int baseCount = PlayerInfo.player.getBases().Count;
+			if(baseCount==1){
+				PlayerInfo.player.updateFood(50);
+				PlayerInfo.player.updateWater(50);
+			}
+			else if(baseCount>1&&baseCount<=3){
+				PlayerInfo.player.updateFood(30);
+				PlayerInfo.player.updateWater(30);
+			}
+			else if(baseCount>3&&baseCount<=5){
+				PlayerInfo.player.updateFood(10);
+				PlayerInfo.player.updateWater(10);
+			}
+		}
+	}
+	void handleTerraforming(){
+		if(PlayerInfo.mars.getAverageTemp()>(0.21/2)){
+			for(int x=0;x<TGMap.size_x;x++){
+				for(int y=0;y<TGMap.size_z;y++){
+					int chanceToChange = Random.Range(1,100);
+					if(TGMap.map.GetTileAt(x,y).getHasIce()==true&&chanceToChange>=1&&chanceToChange<=10){
+						TGMap.map.GetTileAt(x,y).updateHasIce(false);
+						if (TGMap.elevationMap [x, y].ToString ().Contains ("Mountain")) {
+							int whichTexture = Random.Range(1,4);
+							string mountainTexture = "Textures/Mountain Texture "+whichTexture;
+							if(TGMap.elevationMap[x,y].FindChild("pCube4")){
+								Transform tile=TGMap.elevationMap[x,y].transform.FindChild("pCube4");
+								tile.renderer.material.mainTexture = Resources.Load (mountainTexture) as Texture;
+							}
+							else{
+								TGMap.elevationMap[x,y].renderer.material.mainTexture = Resources.Load(mountainTexture) as Texture;
+							}
+						}
+						else if (TGMap.elevationMap [x, y].ToString ().Contains ("Flat")) {
+							int whichTexture = Random.Range(1,9);
+							string flatTexture = "Textures/Flat Texture "+whichTexture;
+							if(TGMap.elevationMap[x,y].FindChild("pCube4")){
+								Transform tile=TGMap.elevationMap[x,y].transform.FindChild("pCube4");
+								tile.renderer.material.mainTexture = Resources.Load (flatTexture) as Texture;
+							}
+							else{
+								TGMap.elevationMap[x,y].renderer.material.mainTexture = Resources.Load(flatTexture) as Texture;
+							}
+						}
+						else if (TGMap.elevationMap [x, y].ToString ().Contains ("Hills")) {
+							int whichTexture = Random.Range(1,3);
+							string hillTexture = "Textures/Hill Texture "+whichTexture;
+							if(TGMap.elevationMap[x,y].FindChild("pCube4")){
+								Transform tile=TGMap.elevationMap[x,y].transform.FindChild("pCube4");
+								tile.renderer.material.mainTexture = Resources.Load (hillTexture) as Texture;
+							}
+							else{
+								TGMap.elevationMap[x,y].renderer.material.mainTexture = Resources.Load(hillTexture) as Texture;
+							}
+						}
+						else if (TGMap.elevationMap [x, y].ToString ().Contains ("Valley")) {
+							int whichTexture = Random.Range(1,9);
+							string flatTexture = "Textures/Flat Texture "+whichTexture;
+							if(TGMap.elevationMap[x,y].FindChild("pCube4")){
+								Transform tile=TGMap.elevationMap[x,y].transform.FindChild("pCube4");
+								tile.renderer.material.mainTexture = Resources.Load (flatTexture) as Texture;
+							}
+							else{
+								TGMap.elevationMap[x,y].renderer.material.mainTexture = Resources.Load(flatTexture) as Texture;
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }

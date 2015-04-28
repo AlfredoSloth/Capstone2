@@ -158,43 +158,44 @@ public class TileMapMouse : MonoBehaviour {
 						//Checks for Building on map. If building is present, building information shows up.
 						build = TGMap.map.GetTileAt ((int)selectedTileCoord.x, (int)selectedTileCoord.z).getBuilding ();
 						if(build!=null&&build is Beacon){
-					Beacon beac = TGMap.map.GetTileAt ((int)selectedTileCoord.x, (int)selectedTileCoord.z).getBuilding () as Beacon;
-					if(lastSelected!=null){
-						recolorRange();
-					}
-					beac.displayRange();
-					lastSelected = beac;
-				}
-				else if(build!=null&&build is Base){
-					Base sBase = TGMap.map.GetTileAt ((int)selectedTileCoord.x, (int)selectedTileCoord.z).getBuilding () as Base;
-					if(lastSelected!=null){
-						recolorRange();
-					}
-					sBase.displayRange();
-					lastSelected = sBase;
-				}
-				else if(build!=null&&build is Warehouse){
-					Warehouse warehouse = TGMap.map.GetTileAt ((int)selectedTileCoord.x, (int)selectedTileCoord.z).getBuilding () as Warehouse;
-					//warehouse.showSupplying();
+							Beacon beac = TGMap.map.GetTileAt ((int)selectedTileCoord.x, (int)selectedTileCoord.z).getBuilding () as Beacon;
+							if(lastSelected!=null){
+								recolorRange();
+							}
+							beac.displayRange();
+							lastSelected = beac;
+						}
+						else if(build!=null&&build is Base){
+							Base sBase = TGMap.map.GetTileAt ((int)selectedTileCoord.x, (int)selectedTileCoord.z).getBuilding () as Base;
+							if(lastSelected!=null){
+								recolorRange();
+							}
+							sBase.displayRange();
+							lastSelected = sBase;
+						}
+						else if(build!=null&&build is Warehouse){
+							Warehouse warehouse = TGMap.map.GetTileAt ((int)selectedTileCoord.x, (int)selectedTileCoord.z).getBuilding () as Warehouse;
+							//warehouse.showSupplying();
 
-				}
-				else if(build!=null&&build is Powerplant){
-					Powerplant power = TGMap.map.GetTileAt ((int)selectedTileCoord.x, (int)selectedTileCoord.z).getBuilding () as Powerplant;
-					if(lastSelected!=null){
-						recolorRange();
-					}
-					power.displayRange();
-					lastSelected = power;
-				}
-				else if (build != null) {
-					showBuildingStats (build);
-				} else {
-					if(lastSelected!=null){
-						recolorRange();
-					}
-					lastSelected = null;
-					hideBuildingStats ();
-				}
+						}
+						else if(build!=null&&build is Powerplant){
+							Powerplant power = TGMap.map.GetTileAt ((int)selectedTileCoord.x, (int)selectedTileCoord.z).getBuilding () as Powerplant;
+							if(lastSelected!=null){
+								recolorRange();
+							}
+							power.displayRange();
+							lastSelected = power;
+						}
+						else if (build != null) {
+							showBuildingStats (build);
+						} 
+						else {
+							if(lastSelected!=null){
+								recolorRange();
+							}
+							lastSelected = null;
+							hideBuildingStats ();
+						}
 						if (TGMap.map.GetTileAt ((int)currentTileCoord.x, (int)currentTileCoord.z).getHasRover () != null) {
 							selection = TGMap.map.GetTileAt ((int)currentTileCoord.x, (int)currentTileCoord.z);
 							selectionX = (int)currentTileCoord.x;
@@ -483,7 +484,7 @@ public class TileMapMouse : MonoBehaviour {
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
 		Debug.Log ("cost:" + newBuildingInfo.getCost());
-		PlayerInfo.player.updateBuildingResources(resource);
+		PlayerInfo.player.updateBuildingResources(-newBuildingInfo.getCost());
 		Debug.Log ("resource left:" + PlayerInfo.player.getBuildingResources());
 		PlayerInfo.buildings[(int)currentTileCoord.x,(int)currentTileCoord.z] = newBuilding;
 		//update the cost to upgrade to level2
@@ -512,7 +513,7 @@ public class TileMapMouse : MonoBehaviour {
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
 		Debug.Log ("cost:" + newBuildingInfo.getCost());
-		PlayerInfo.player.updateBuildingResources(resource);
+		PlayerInfo.player.updateBuildingResources(-newBuildingInfo.getCost());
 		Debug.Log ("resource left:" + PlayerInfo.player.getBuildingResources());
 		PlayerInfo.buildings[(int)currentTileCoord.x,(int)currentTileCoord.z] = newBuilding;
 		//update the cost to upgrade to level2
@@ -541,7 +542,7 @@ public class TileMapMouse : MonoBehaviour {
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
 		Debug.Log ("cost:" + newBuildingInfo.getCost());
-		PlayerInfo.player.updateBuildingResources(resource);
+		PlayerInfo.player.updateBuildingResources(-newBuildingInfo.getCost());
 		Debug.Log ("resource left:" + PlayerInfo.player.getBuildingResources());
 		PlayerInfo.buildings[(int)currentTileCoord.x,(int)currentTileCoord.z] = newBuilding;
 		//update the cost to upgrade to level2
@@ -570,7 +571,7 @@ public class TileMapMouse : MonoBehaviour {
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
 		Debug.Log ("cost:" + newBuildingInfo.getCost());
-		PlayerInfo.player.updateBuildingResources(resource);
+		PlayerInfo.player.updateBuildingResources(-newBuildingInfo.getCost());
 		Debug.Log ("resource left:" + PlayerInfo.player.getBuildingResources());
 		PlayerInfo.buildings[(int)currentTileCoord.x,(int)currentTileCoord.z] = newBuilding;
 		//update the cost to upgrade to level2
@@ -599,7 +600,7 @@ public class TileMapMouse : MonoBehaviour {
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
 		Debug.Log ("cost:" + newBuildingInfo.getCost());
-		PlayerInfo.player.updateBuildingResources(resource);
+		PlayerInfo.player.updateBuildingResources(-newBuildingInfo.getCost());
 		Debug.Log ("resource left:" + PlayerInfo.player.getBuildingResources());
 		PlayerInfo.buildings[(int)currentTileCoord.x,(int)currentTileCoord.z] = newBuilding;
 		//update the cost to upgrade to level2
@@ -628,7 +629,7 @@ public class TileMapMouse : MonoBehaviour {
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
 		Debug.Log ("cost:" + newBuildingInfo.getCost());
-		PlayerInfo.player.updateBuildingResources(resource);
+		PlayerInfo.player.updateBuildingResources(-newBuildingInfo.getCost());
 		Debug.Log ("resource left:" + PlayerInfo.player.getBuildingResources());
 		PlayerInfo.buildings[(int)currentTileCoord.x,(int)currentTileCoord.z] = newBuilding;
 		//update the cost to upgrade to level2
@@ -657,7 +658,7 @@ public class TileMapMouse : MonoBehaviour {
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
 		Debug.Log ("cost:" + newBuildingInfo.getCost());
-		PlayerInfo.player.updateBuildingResources(resource);
+		PlayerInfo.player.updateBuildingResources(-newBuildingInfo.getCost());
 		Debug.Log ("resource left:" + PlayerInfo.player.getBuildingResources());
 		PlayerInfo.buildings[(int)currentTileCoord.x,(int)currentTileCoord.z] = newBuilding;
 		//update the cost to upgrade to level2
@@ -686,7 +687,7 @@ public class TileMapMouse : MonoBehaviour {
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
 		Debug.Log ("cost:" + newBuildingInfo.getCost());
-		PlayerInfo.player.updateBuildingResources(resource);
+		PlayerInfo.player.updateBuildingResources(-newBuildingInfo.getCost());
 		Debug.Log ("resource left:" + PlayerInfo.player.getBuildingResources());
 		PlayerInfo.buildings[(int)currentTileCoord.x,(int)currentTileCoord.z] = newBuilding;
 		//update the cost to upgrade to level2
@@ -715,7 +716,7 @@ public class TileMapMouse : MonoBehaviour {
 		resource = PlayerInfo.player.getBuildingResources ();
 		resource -= newBuildingInfo.getCost();
 		Debug.Log ("cost:" + newBuildingInfo.getCost());
-		PlayerInfo.player.updateBuildingResources(resource);
+		PlayerInfo.player.updateBuildingResources(-newBuildingInfo.getCost());
 		Debug.Log ("resource left:" + PlayerInfo.player.getBuildingResources());
 		PlayerInfo.buildings[(int)currentTileCoord.x,(int)currentTileCoord.z] = newBuilding;
 		//update the cost to upgrade to level2

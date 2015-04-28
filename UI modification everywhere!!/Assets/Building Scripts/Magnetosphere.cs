@@ -19,6 +19,7 @@
 	
 	public override string buildingStats()
 	{
+		string worked;
 		string stat;
 		if (this.getPowered() == 0) {
 			stat = "false";
@@ -27,7 +28,11 @@
 		} else {
 			stat = "N/A";
 		}
-		
-		return "Name: " + this.getName () + "\nStatus: " + this.getStatus() + "\nPowered: " + stat + "\nTurns left until operation: " + this.getTurnsToTurnOnMagnetosphere();
+		if (this.getWorked () == true)
+			worked = "Worked";
+		else
+			worked = "Not being worked";
+
+		return "Name: " + this.getName () + "\nStatus: " + this.getStatus() + "\nPowered: " + stat + "\nTurns left until operation: " + this.getTurnsToTurnOnMagnetosphere()+ "\n"+worked;
 	}
 }
