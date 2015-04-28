@@ -69,7 +69,6 @@ public class StartLocation : MonoBehaviour {
 		//take off the cost to build level 1
 		//update the cost to upgrade to level2
 
-
 		Vector3 location1 = TGMap.elevationMap [placeRoverX, placeRoverY].transform.position;
 		Vector3 location2 = TGMap.elevationMap [placeRoverX + 2, placeRoverY].transform.position;
 		Vector3 location3 = TGMap.elevationMap [placeRoverX - 1, placeRoverY].transform.position;

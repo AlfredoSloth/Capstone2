@@ -15,6 +15,8 @@ public class TileMapMouse : MonoBehaviour {
 	private GameObject instance;
 	public Transform selectionCube, tileSelection;
 	GameObject bipanel, bitext, btnPlaceBuilding, btnUpgrade, warnPanel, warnText, marsPanel, marsText1, marsText2, constrPanel;
+	GameObject baseTip, beaconTip, chemTip, factoryTip, farmTip, magnetoTip, powerTip, labTip, roverTip, warehouseTip;
+	GameObject baseText, beaconText, chemText, factoryText, farmText, magnetoText, powerText, labText, roverText, warehouseText;
 	GameObject waterScore, foodScore, buildingScore, researchScore;
 	TDTile selection;
 	int selectionX, selectionY;
@@ -48,10 +50,46 @@ public class TileMapMouse : MonoBehaviour {
 		//set up prefab for building initialization
 		instance = (GameObject)Resources.Load ("Base");
 		//Find the UI objects
+		baseTip = GameObject.Find ("BaseTip");
+		beaconTip = GameObject.Find ("BeaconTip");
+		farmTip = GameObject.Find ("FarmTip");
+		labTip = GameObject.Find ("LabTip");
+		warehouseTip = GameObject.Find ("WarehouseTip");
+		factoryTip = GameObject.Find ("FactoryTip");
+		powerTip = GameObject.Find ("PowerTip");
+		magnetoTip = GameObject.Find ("MagnetoTip");
+		chemTip = GameObject.Find ("ChemTip");
+		roverTip = GameObject.Find ("RoverTip");
+
+		baseText = GameObject.Find ("BaseTipText");
+		beaconText = GameObject.Find ("BeaconTipText");
+		chemText = GameObject.Find ("ChemTipText");
+		factoryText = GameObject.Find ("FactoryTipText");
+		farmText = GameObject.Find ("FarmTipText");
+		magnetoText = GameObject.Find ("MagnetoTipText");
+		powerText = GameObject.Find ("PowerTipText");
+		labText = GameObject.Find ("LabTipText");
+		roverText = GameObject.Find ("RoverTipText");
+		warehouseText = GameObject.Find ("WarehouseTipText");
+
+		baseTip.SetActive (false);
+		beaconTip.SetActive (false);
+		farmTip.SetActive (false);
+		labTip.SetActive (false);
+		warehouseTip.SetActive (false);
+		factoryTip.SetActive (false);
+		powerTip.SetActive (false);
+		magnetoTip.SetActive (false);
+		chemTip.SetActive (false);
+		roverTip.SetActive (false);
+
 		constrPanel = GameObject.Find ("ConstrButtonPanel");
 		marsPanel = GameObject.Find ("TerraformingPanel");
 		marsText1 = GameObject.Find ("ObjectInfoText");
 		marsText2 = GameObject.Find ("TerraformingText");
+		constrPanel.SetActive (false);
+		marsPanel.SetActive (false);
+
 		warnPanel = GameObject.Find ("WarnMsgPanel");
 		warnText = GameObject.Find ("WarnText");
 		bipanel = GameObject.Find ("BuildingInfoPanel");
@@ -73,8 +111,7 @@ public class TileMapMouse : MonoBehaviour {
 		hideWarnMessage();
 		updateScoreText();
 		updateTerraformingText ();
-		constrPanel.SetActive (false);
-		marsPanel.SetActive (false);
+		updateTipText ();
 	}
 	
 	// Update is called once per frame
@@ -382,9 +419,21 @@ public class TileMapMouse : MonoBehaviour {
 	}
 
 	void updateTerraformingText(){
-		//marsText1, marsText2
 		marsText1.GetComponent<Text> ().text = PlayerInfo.mars.marsStats ();
 		marsText2.GetComponent<Text> ().text = "Number of Factories :" + PlayerInfo.player.getFactory ().Count + "\nNumber of Chemistry Plants: " + PlayerInfo.player.getChemistryPlants ().Count;
+	}
+
+	void updateTipText(){
+		baseText.GetComponent<Text> ().text = "Cost: " + PlayerInfo.player.getCostAtLevel1 ("Base") + ", Turns: " + PlayerInfo.player.getTurnsToBuildAtLevel1 ("Base");
+		beaconText.GetComponent<Text> ().text = "Cost: " + PlayerInfo.player.getCostAtLevel1 ("Beacon") + ", Turns: " + PlayerInfo.player.getTurnsToBuildAtLevel1 ("Beacon");
+		chemText.GetComponent<Text> ().text = "Cost: " + PlayerInfo.player.getCostAtLevel1 ("Chemistry Plant") + ", Turns: " + PlayerInfo.player.getTurnsToBuildAtLevel1 ("Chemistry Plant");
+		factoryText.GetComponent<Text> ().text = "Cost: " + PlayerInfo.player.getCostAtLevel1 ("Factory") + ", Turns: " + PlayerInfo.player.getTurnsToBuildAtLevel1 ("Factory");
+		farmText.GetComponent<Text> ().text = "Cost: " + PlayerInfo.player.getCostAtLevel1 ("Farm") + ", Turns: " + PlayerInfo.player.getTurnsToBuildAtLevel1 ("Farm");
+		magnetoText.GetComponent<Text> ().text = "Cost: " + PlayerInfo.player.getCostAtLevel1 ("Magnetosphere") + ", Turns: " + PlayerInfo.player.getTurnsToBuildAtLevel1 ("Magnetosphere");
+		powerText.GetComponent<Text> ().text = "Cost: " + PlayerInfo.player.getCostAtLevel1 ("Power Plan") + ", Turns: " + PlayerInfo.player.getTurnsToBuildAtLevel1 ("Power Plan");
+		labText.GetComponent<Text> ().text = "Cost: " + PlayerInfo.player.getCostAtLevel1 ("Research Lab") + ", Turns: " + PlayerInfo.player.getTurnsToBuildAtLevel1 ("Research Lab");
+		roverText.GetComponent<Text> ().text = "Cost: " + PlayerInfo.player.getCostAtLevel1 ("Rover") + ", Turns: " + PlayerInfo.player.getTurnsToBuildAtLevel1 ("Rover");
+		warehouseText.GetComponent<Text> ().text = "Cost: " + PlayerInfo.player.getCostAtLevel1 ("Warehouse") + ", Turns: " + PlayerInfo.player.getTurnsToBuildAtLevel1 ("Warehouse");
 	}
 	
 	public void buildBuilding(string type){

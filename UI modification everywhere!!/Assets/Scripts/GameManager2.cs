@@ -34,6 +34,13 @@ public class GameManager2 : MonoBehaviour {
 		}
 	}
 
+	public void displayUIByHover(GameObject toggleTarget){
+		toggleTarget.SetActive(true);
+	}
+	public void hideUIByHover(GameObject toggleTarget){
+		toggleTarget.SetActive(false);
+	}
+
 	private void escMenuPopup(){
 		if (escMenu != null) {
 			if (escMenu.active == false) {
