@@ -4,9 +4,9 @@ using System.Collections;
 public class PlayerInfo : MonoBehaviour
 {
 	public static Player player;
-	public int water=0;
-	public int food=0;
-	public int buildingResource=0;
+	//public int water=0;
+	//public int food=0;
+	//public int buildingResource=0;
 	public static Mars mars;
 	public static Transform flatTile;
 	public static GameObject[,] buildings;
@@ -31,7 +31,7 @@ public class PlayerInfo : MonoBehaviour
 		flatTile = Resources.Load ("FlatPrefab") as Transform;
 	}
 	void createPlayer(){
-		player = new Player (100, 100, 100, 100);
+		player = new Player (1000, 1000, 1000, 1000);
 	}
 
 	public static void createStartLocation(){

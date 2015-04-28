@@ -3,8 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class GameManager2 : MonoBehaviour {
-
-
+	
 	GameObject escMenu;
 	bool escMenuActive = false;
 	GameObject techPanel;
@@ -56,9 +55,7 @@ public class GameManager2 : MonoBehaviour {
 				}
 				else{
 					escMenu.SetActive(false);
-
 				}
-				
 			}
 		}
 	}

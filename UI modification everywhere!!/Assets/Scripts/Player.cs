@@ -27,11 +27,11 @@ public class Player : MonoBehaviour {
 	GameObject facttext;
 	GameObject twotext;
 	GameObject threetext;
-	public bool magnetosphereResearched;
-	public bool factoryResearched;
-	public bool chemicalPlantResearched;
-	public bool levelTwoReseached;
-	public bool levelThreeResearched;
+	public bool magnetosphereResearched = false;
+	public bool factoryResearched = false;
+	public bool chemicalPlantResearched = false;
+	public bool levelTwoResearched = false;
+	public bool levelThreeResearched = false;
 	public Player(int research, int food, int water, int buildingResources){
 		setResearch (research);
 		setFood (food);
@@ -57,15 +57,10 @@ public class Player : MonoBehaviour {
 		researchlabs = new List<ResearchLab> ();
 		rovers = new List<Rover> ();
 		warehouses = new List<Warehouse> ();
-		magtext = GameObject.FindGameObjectWithTag ("magtext");
-		chemtext = GameObject.FindGameObjectWithTag ("chemtext");
-		facttext = GameObject.FindGameObjectWithTag ("facttext");
-		twotext = GameObject.FindGameObjectWithTag ("twotext");
-		threetext = GameObject.FindGameObjectWithTag ("threetext");
 		magnetosphereResearched = false;
 		factoryResearched = false;
 		chemicalPlantResearched = false;
-		levelTwoReseached = false;
+		levelTwoResearched = false;
 		levelThreeResearched = false;
 	}
 
@@ -289,39 +284,57 @@ public class Player : MonoBehaviour {
 	public int getTurnsToBuildAtLevel1(string key){
 		return this.turnsToBuildAtLevel1[key];
 	}
+
 	public void unlockMagnetoSphere(){
-		if(this.getResearch()>250){
-			magnetosphereResearched=true;
-			Debug.Log("researched!");
-			magtext.GetComponent<Text>().text = "researched";
+		//if (this.research > 250) {
+		magtext = GameObject.FindGameObjectWithTag ("magtext");
+		//Debug.Log ("Research resourses before: " + PlayerInfo.player.getResearch());
+		if (magnetosphereResearched != true && PlayerInfo.player.getResearch () >= 250) {
+			magnetosphereResearched = true;
+			PlayerInfo.player.updateResearch(-250);
+			magtext.GetComponent<Text> ().text = "researched";
+		} else {
+			Debug.Log ("You either do not have enoguh resources or have already researched this.");
 		}
 	}
 	public void unlockFactory(){
-		if(this.getResearch()>80){
+		facttext = GameObject.FindGameObjectWithTag ("facttext");
+		if(factoryResearched != true && PlayerInfo.player.getResearch () >= 80){
 			factoryResearched=true;
-			Debug.Log("researched!");
-			magtext.GetComponent<Text>().text = "researched";
+			PlayerInfo.player.updateResearch(-80);;
+			facttext.GetComponent<Text>().text = "researched";
+		} else {
+			Debug.Log ("You either do not have enoguh resources or have already researched this.");
 		}
 	}
 	public void unlockChemicalPlant(){
-		if(this.getResearch()>100){
+		chemtext = GameObject.FindGameObjectWithTag ("chemtext");
+		if(chemicalPlantResearched != true && PlayerInfo.player.getResearch () >= 100){
 			chemicalPlantResearched=true;
-			Debug.Log("researched!");
-			magtext.GetComponent<Text>().text = "researched";
+			PlayerInfo.player.updateResearch(-100);
+			chemtext.GetComponent<Text>().text = "researched";
+		} else {
+			Debug.Log ("You either do not have enoguh resources or have already researched this.");
 		}
 	}
 	public void unlockLevel2(){
-		if(this.getResearch()>40){
-			levelTwoReseached=true;
-			Debug.Log("researched!");
-			magtext.GetComponent<Text>().text = "researched";
+		twotext = GameObject.FindGameObjectWithTag ("twotext");
+		if(levelTwoResearched != true && PlayerInfo.player.getResearch () >= 40){
+			levelTwoResearched=true;
+			PlayerInfo.player.updateResearch(-40);
+			twotext.GetComponent<Text>().text = "researched";
+		} else {
+			Debug.Log ("You either do not have enoguh resources or have already researched this.");
 		}
 	}
 	public void unlockLevel3(){
-		if(this.getResearch()>80){
+		threetext = GameObject.FindGameObjectWithTag ("threetext");
+		if(levelThreeResearched != true && PlayerInfo.player.getResearch () >= 80){
 			levelThreeResearched=true;
-			Debug.Log("researched!");
-			magtext.GetComponent<Text>().text = "researched";
+			PlayerInfo.player.updateResearch(-80);
+			threetext.GetComponent<Text>().text = "researched";
+		} else {
+			Debug.Log ("You either do not have enoguh resources or have already researched this.");
 		}
 	}
 }
