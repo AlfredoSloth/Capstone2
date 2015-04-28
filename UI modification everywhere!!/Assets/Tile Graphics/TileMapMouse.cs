@@ -14,7 +14,7 @@ public class TileMapMouse : MonoBehaviour {
 	Vector3 currentTileCoord, selectedTileCoord;
 	private GameObject instance;
 	public Transform selectionCube, tileSelection;
-	GameObject bipanel, bitext, btnPlaceBuilding, btnUpgrade, warnPanel, warnText;
+	GameObject bipanel, bitext, btnPlaceBuilding, btnUpgrade, warnPanel, warnText, marsPanel, marsText1, marsText2, constrPanel;
 	GameObject waterScore, foodScore, buildingScore, researchScore;
 	TDTile selection;
 	int selectionX, selectionY;
@@ -48,6 +48,10 @@ public class TileMapMouse : MonoBehaviour {
 		//set up prefab for building initialization
 		instance = (GameObject)Resources.Load ("Base");
 		//Find the UI objects
+		constrPanel = GameObject.Find ("ConstrButtonPanel");
+		marsPanel = GameObject.Find ("TerraformingPanel");
+		marsText1 = GameObject.Find ("ObjectInfoText");
+		marsText2 = GameObject.Find ("TerraformingText");
 		warnPanel = GameObject.Find ("WarnMsgPanel");
 		warnText = GameObject.Find ("WarnText");
 		bipanel = GameObject.Find ("BuildingInfoPanel");
@@ -68,6 +72,9 @@ public class TileMapMouse : MonoBehaviour {
 		place = "none";
 		hideWarnMessage();
 		updateScoreText();
+		updateTerraformingText ();
+		constrPanel.SetActive (false);
+		marsPanel.SetActive (false);
 	}
 	
 	// Update is called once per frame
@@ -327,6 +334,12 @@ public class TileMapMouse : MonoBehaviour {
 		foodScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getFood();
 		buildingScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getBuildingResources();
 		researchScore.GetComponent<Text> ().text = "" + PlayerInfo.player.getResearch();
+	}
+
+	void updateTerraformingText(){
+		//marsText1, marsText2
+		marsText1.GetComponent<Text> ().text = PlayerInfo.mars.marsStats ();
+		marsText2.GetComponent<Text> ().text = "Number of Factories :" + PlayerInfo.player.getFactory ().Count + "\nNumber of Chemistry Plants: " + PlayerInfo.player.getChemistryPlants ().Count;
 	}
 	
 	public void buildBuilding(string type){

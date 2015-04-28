@@ -52,4 +52,8 @@ public class Mars{
 	public void updateMarsOxygen(float oxygen){
 		this.marsOxygen = oxygen;
 	}
+
+	public virtual string marsStats(){
+		return "Current Avg Temperature: " + this.getAverageTemp () + "\nGoal Avg Temperation: 61\nCurrent Oxygen Level: " + this.getMarsOxygen() + "\nGoal Oxygen Level: 0.21\nMars has megnetosphere: " + this.getMarsHasMegnetosphere();
+	}
 }
