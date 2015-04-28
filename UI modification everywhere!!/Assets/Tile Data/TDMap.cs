@@ -17,10 +17,10 @@ public class TDMap {
 		for(int x=0;x<width;x++){
 			for(int y=0;y<height;y++){
 				if(y>=0 && y < size_y/3){
-					map_data[x,y] = new TDTile(0);		
+					map_data[x,y] = new TDTile(0,x,y);		
 				}
 				else{
-					map_data[x,y] = new TDTile(1);	
+					map_data[x,y] = new TDTile(1,x,y);	
 				}
 			}
 		}
@@ -61,5 +61,8 @@ public class TDMap {
 	}
 	public int getSize_y (){
 		return size_y;
+	}
+	public TDTile[,] getMap_data(){
+		return map_data;
 	}
 }

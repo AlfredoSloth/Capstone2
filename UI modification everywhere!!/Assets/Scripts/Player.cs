@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using UnityEngine.UI;
 public class Player : MonoBehaviour {
 	private int research;
 	private int food;
@@ -9,7 +9,7 @@ public class Player : MonoBehaviour {
 	private int buildingResources;
 	private Dictionary<string, int> costsAtLevel1;
 	private Dictionary<string, int> turnsToBuildAtLevel1;
-	private List<Research> technologies;
+	public List<Research> technologies;
 	private List<Building> constructing;
 	private List<Building> upgrading;
 	private List<Base> bases;
@@ -22,7 +22,16 @@ public class Player : MonoBehaviour {
 	private List<ResearchLab> researchlabs;
 	private List<Rover> rovers;
 	private List<Warehouse> warehouses;
-	
+	GameObject magtext;
+	GameObject chemtext;
+	GameObject facttext;
+	GameObject twotext;
+	GameObject threetext;
+	public bool magnetosphereResearched;
+	public bool factoryResearched;
+	public bool chemicalPlantResearched;
+	public bool levelTwoReseached;
+	public bool levelThreeResearched;
 	public Player(int research, int food, int water, int buildingResources){
 		setResearch (research);
 		setFood (food);
@@ -34,7 +43,8 @@ public class Player : MonoBehaviour {
 		turnsToBuildAtLevel1 = new Dictionary<string, int> ();
 		setTurnsToBuildAtLevel1 ();
 		technologies = new List<Research> ();
-
+		technologies = new List<Research> ();
+		setResearchTechnologies ();
 		constructing = new List<Building> ();
 		upgrading = new List<Building> ();
 		bases = new List<Base> ();
@@ -47,6 +57,16 @@ public class Player : MonoBehaviour {
 		researchlabs = new List<ResearchLab> ();
 		rovers = new List<Rover> ();
 		warehouses = new List<Warehouse> ();
+		magtext = GameObject.FindGameObjectWithTag ("magtext");
+		chemtext = GameObject.FindGameObjectWithTag ("chemtext");
+		facttext = GameObject.FindGameObjectWithTag ("facttext");
+		twotext = GameObject.FindGameObjectWithTag ("twotext");
+		threetext = GameObject.FindGameObjectWithTag ("threetext");
+		magnetosphereResearched = false;
+		factoryResearched = false;
+		chemicalPlantResearched = false;
+		levelTwoReseached = false;
+		levelThreeResearched = false;
 	}
 
 	private void setResearch(int research){
@@ -247,7 +267,7 @@ public class Player : MonoBehaviour {
 		this.turnsToBuildAtLevel1.Add ("Warehouse", 2);
 		this.turnsToBuildAtLevel1.Add ("Rover", 3);
 	}
-	private void setResearch(){
+	private void setResearchTechnologies(){
 		this.technologies.Add (new Research("Unlock Magnetosphere Machine", 250, false));
 		this.technologies.Add (new Research("Unlock Chemical Plant", 100, false));
 		this.technologies.Add (new Research("Unlock Factory", 80, false));
@@ -268,5 +288,40 @@ public class Player : MonoBehaviour {
 	
 	public int getTurnsToBuildAtLevel1(string key){
 		return this.turnsToBuildAtLevel1[key];
+	}
+	public void unlockMagnetoSphere(){
+		if(this.getResearch()>250){
+			magnetosphereResearched=true;
+			Debug.Log("researched!");
+			magtext.GetComponent<Text>().text = "researched";
+		}
+	}
+	public void unlockFactory(){
+		if(this.getResearch()>80){
+			factoryResearched=true;
+			Debug.Log("researched!");
+			magtext.GetComponent<Text>().text = "researched";
+		}
+	}
+	public void unlockChemicalPlant(){
+		if(this.getResearch()>100){
+			chemicalPlantResearched=true;
+			Debug.Log("researched!");
+			magtext.GetComponent<Text>().text = "researched";
+		}
+	}
+	public void unlockLevel2(){
+		if(this.getResearch()>40){
+			levelTwoReseached=true;
+			Debug.Log("researched!");
+			magtext.GetComponent<Text>().text = "researched";
+		}
+	}
+	public void unlockLevel3(){
+		if(this.getResearch()>80){
+			levelThreeResearched=true;
+			Debug.Log("researched!");
+			magtext.GetComponent<Text>().text = "researched";
+		}
 	}
 }

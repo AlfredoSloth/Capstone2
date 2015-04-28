@@ -31,7 +31,9 @@ public class TileMapMouse : MonoBehaviour {
 	int buildTerrainCheck;
 	Vector3 beacSavedCoords;
 	Building lastSelected;
-
+	Vector3 lastRoverPosition;
+	int lastXPos;
+	int lastYPos;
 	public AudioClip baseSound;
 	public AudioClip beaconSound;
 	public AudioClip chemicalPlantSound;
@@ -296,21 +298,96 @@ public class TileMapMouse : MonoBehaviour {
 
 					//If user Right-Clicks
 					if (Input.GetMouseButtonDown (1)) {
+						lastRoverPosition = new Vector3(0,0,0);
 						if (selection != null) {
 							TDTile destination = TGMap.map.GetTileAt ((int)currentTileCoord.x, (int)currentTileCoord.z);
 							FogMap functions = new FogMap ();
-							for (int xpos = selectionX-1; xpos<selectionX+2; xpos++) {
-								for (int ypos = selectionY-1; ypos<selectionY+2; ypos++) {
+							for (int xpos = 1/*selectionX-1*/; xpos< 100/*selectionX+2*/; xpos++) {
+								for (int ypos = 1/*selectionY-1*/; ypos< 50/*selectionY+2*/; ypos++) {
 									if (xpos == selectionX && ypos == selectionY) {
+										Debug.Log ("Your alreay there, you silly goose!");
 									} 
+									else if(TGMap.map.GetTileAt((int)currentTileCoord.x,(int)currentTileCoord.z).getTerrainType() != 1){
+										Debug.Log("Alittle to hilly");
+										
+									}
 									else if (TGMap.map.GetTileAt (xpos, ypos) == destination) {
+										
+										
 										TGMap.map.GetTileAt (xpos, ypos).updateHasRover (null);
 										destination.updateHasRover (selection.getHasRover ());
 										functions.checkFog2 ((int)currentTileCoord.x, (int)currentTileCoord.z);
+										int i = 1;
+										List<TDTile> path = FindPath(TGMap.map.GetTileAt (selectionX, selectionY),destination);
+										Debug.Log ("number of tiles rover needs to move"+path.Count);
+										foreach(TDTile tile in path){
+											Debug.Log(tile.getXPos() +" " + tile.getYPos());
+										}
+										foreach(TDTile tile in path){
+											if(i==1){
+												//destination - go to the next tile on path
+												Debug.Log("xpos " + tile.getXPos()+ "ypos " + tile.getYPos());
+												Vector3 destinationPosition = TGMap.elevationMap [tile.getXPos(), tile.getYPos()].transform.position;
+												Debug.Log(destinationPosition);
+												//Debug.Log(selectionX,selction);
+												//change origin position to the next tile on path
+												TurnController.rovers [selectionX, selectionY].transform.position = destinationPosition;
+												
+												selection=tile;
+												//get rover and save to the new position
+												TurnController.rovers [tile.getXPos(), tile.getYPos()] = TurnController.rovers [selectionX, selectionY];
+												TGMap.map.GetTileAt(tile.getXPos(),tile.getYPos()).updateHasRover(selection.getHasRover());
+												TGMap.map.GetTileAt(selectionX,selectionY).updateHasRover(null);
+												Debug.Log(TurnController.rovers [tile.getXPos(), tile.getYPos()]);
+												//set last position to null
+												TurnController.rovers [selectionX, selectionY] = null;
+												//lastposition set to the tile the rover moved to
+												lastXPos=tile.getXPos();
+												lastYPos=tile.getYPos();
+												lastRoverPosition=destinationPosition;
+												Debug.Log("last x position after origin" + lastRoverPosition.x + " "+ lastRoverPosition.z);
+											}
+											//rover has moved once
+											else{
+												
+												Vector3 destinationPosition = TGMap.elevationMap [tile.getXPos(), tile.getYPos()].transform.position;
+												Debug.Log(destinationPosition);
+												Debug.Log("last x position before next move" + lastRoverPosition.x + " "+ lastRoverPosition.z);
+												//Debug.Log(TurnController.rovers [(int)lastRoverPosition.x, (int)lastRoverPosition.z].transform.position);
+												
+												TurnController.rovers [lastXPos,lastYPos].transform.position = destinationPosition; 
+												selection=tile;
+												
+												if(lastYPos<tile.getYPos()){
+													TurnController.rovers[lastXPos,lastYPos].transform.rotation = Quaternion.Euler(new Vector3(0,90,0));
+												}
+												
+												if(lastXPos<tile.getXPos()){
+													TurnController.rovers[lastXPos,lastYPos].transform.rotation = Quaternion.Euler(new Vector3(0,180,0));
+												}
+												if(lastXPos>tile.getXPos()){
+													TurnController.rovers[lastXPos,lastYPos].transform.rotation = Quaternion.Euler(new Vector3(0,0,0));
+												}
+												if(lastYPos>tile.getYPos()){
+													TurnController.rovers[lastXPos,lastYPos].transform.rotation = Quaternion.Euler(new Vector3(0,270,0));
+												}
+												TurnController.rovers [tile.getXPos(), tile.getYPos()] = TurnController.rovers [lastXPos, lastYPos];
+												TGMap.map.GetTileAt(tile.getXPos(), tile.getYPos()).updateHasRover(selection.getHasRover());
+												TGMap.map.GetTileAt(lastXPos,lastYPos).updateHasRover(null);
+												TurnController.rovers [lastXPos, lastYPos] = null;
+												lastRoverPosition=destinationPosition;
+												lastXPos=tile.getXPos();
+												lastYPos=tile.getYPos();
+											}
+											Debug.Log(" " + i + " ");
+											i++;
+										}
+										/*
 										Vector3 destinationPosition = TGMap.elevationMap [(int)currentTileCoord.x, (int)currentTileCoord.z].transform.position;
 										TurnController.rovers [selectionX, selectionY].transform.position = destinationPosition; 
 										TurnController.rovers [(int)currentTileCoord.x, (int)currentTileCoord.z] = TurnController.rovers [selectionX, selectionY];
-										TurnController.rovers [selectionX, selectionY] = null;
+										*/
+										//TurnController.rovers [selectionX, selectionY] = null;
 										break;
 									}
 								}
@@ -793,6 +870,11 @@ public class TileMapMouse : MonoBehaviour {
 			range = power.determineRange();
 			power.hideRange(range);
 		}
+	}
+	protected List<TDTile> FindPath(TDTile origin, TDTile goal){
+		AStar pathFinder = new AStar ();
+		pathFinder.FindPath (origin, goal, TGMap.map.getMap_data (),goal.isWalkable());
+		return pathFinder.CellsFromPath ();
 	}
 }
 

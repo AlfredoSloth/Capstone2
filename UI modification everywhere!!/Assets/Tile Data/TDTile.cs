@@ -8,7 +8,12 @@ public class TDTile{
 	public const int TILE_FLAT = 1;
 	public const int TILE_HILLS = 2;
 	public const int TILE_VALLEY = 3;
-	
+
+	public int xPos;
+	public int yPos;
+	public bool walkable;
+	public float movementCost = 0;
+
 	private int terraformed;
 	private int terrainType;
 	private List<TileResource> resources;
@@ -18,10 +23,11 @@ public class TDTile{
 	private bool hasIce;
 	private bool isVisable;
 	private Vector2 baseVector;
-	public TDTile(int lowerOrHigher){
+	public TDTile(int lowerOrHigher,int x,int y){
 		setTerrainType (lowerOrHigher);
 
-		
+		setXPos (x);
+		setYPos (y);
 		setResources();
 		setHasBuilding ();
 		setTerriformed (/*terriform*/);
@@ -30,6 +36,7 @@ public class TDTile{
 		hasRover = null;
 		isVisable = false;
 		baseVector = new Vector2(-1f,-1f);
+		setWalkable ();
 	}
 	private void setTerrainType(int lowerOrHigher){
 		int type = Random.Range (1,100);
@@ -52,6 +59,20 @@ public class TDTile{
 				this.terrainType=2;
 			}
 		}
+	}
+	private void setXPos(int x){
+		this.xPos = x;
+	}
+	private void setYPos(int y){
+		this.yPos = y;
+	}
+	private void setWalkable(){
+		if (getTerrainType () == 1) {
+			this.walkable = true;
+		} else {
+			this.walkable = false;
+		}
+		
 	}
 	private void setResources(){
 		resources = new List<TileResource> ();
@@ -116,6 +137,19 @@ public class TDTile{
 	public Vector2 getIsGathered(){
 		return baseVector;
 	}
+	public int getXPos(){
+		return this.xPos;
+	}
+	public int getYPos(){
+		return this.yPos;
+	}
+	public bool isWalkable(){
+		return this.walkable;
+	}
+	public float getMovementCost(){
+		return this.movementCost;
+	}
+
 	public void updateIsSafe(bool changedValue){
 		this.isSafe = changedValue;
 	}
